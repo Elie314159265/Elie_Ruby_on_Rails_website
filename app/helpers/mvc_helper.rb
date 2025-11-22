@@ -1,0 +1,2 @@
+module MvcHelper
+end
