@@ -1,62 +1,162 @@
-<h1>Elie の Ruby on Rails 学習記録 (･ω･)</h1>
-<p>このWebサイトではElieが Ruby on Rails の学んだことを記録していて、今後Ruby on Railsを学ぶ方のために少しでも参考になればと思います(･ω･)</p>
+<%# =============================================
+    ポートフォリオページテンプレート
 
-<hr>
+    【使い方】
+    - 「★ここを変更★」というコメントの下の部分を編集してください
+    - HTMLタグ（<div>や<h1>など）は変更しないでください
+    - タグの中身のテキストだけを変更すればOKです
 
-<h2>
- このWebサイトで学べること一覧( *¯ ꒳¯*)
-</h2>
+    【例】
+    <h1>ここを変更</h1>
+    ↑「ここを変更」の部分だけを書き換えます
+    ============================================= %>
 
-<ul>
-<li> Rubyってなに？ </li>
-<li> MVCとは？ </li>
-<li> ルーティングからコントローラーへの処理の流れ </li>
-<li> レンダリングでおしゃれに (*‘ω‘ *) </li>
-<li> ヘルパー関数はセキュリティ対策にもなる！ </li>
-<li> DBをつかってみよう！ </li>
-<li> ログイン機能を実装してみる </li>
-<li><strong>↓ Elie独自の発展編(=ↀωↀ=)✧ ↓</strong> </li>
-<li> DBでSupabaseを使ってみよう！ </li>
-<li> Vercelにデプロイしてみよう！ </li>
-<li> このWebサイトはどのように作られてる？ </li>
-<li> クラウド(AWS)を使ってみる☁ </li>
-<li> クラウド(GoogleCloud)を使ってみる☁ </li>
-</ul>
-<p>また今後も追加するかも(*ˊᵕˋ*)</p> 
+<div class="portfolio-container">
 
-<hr>
+  <%# ========== ヘッダーセクション（タイトルと説明） ========== %>
+  <div class="header-section">
+    <%# ★ここを変更★ メインタイトル %>
+    <h1>Elie の Ruby on Rails 学習記録 (･ω･)</h1>
 
-<h2>筆者の環境とセットアップ ( ˙ω​˙ )ゞ</h2>
-<p>
-まず、筆者の環境はGoogle Cloud Shellを利用してます。Cloud Shellは初期セットアップ済みで簡単に始められるのでオススメです!
-</p>
-<p>
-Google Cloudを利用したことない方はおそらく約4万5千円分ぐらいの無料クレジットが付与されると思うので、その枠で十分に開発が可能です。
-</p>
-<h2>Cloud Shellの起動</h2>
-<p>Google Cloud Console にログインして、右上の<strong>Cloud Shell アイコン</strong> をクリックするとターミナルが開くと思います。</p>
-<p>以下のコマンドで環境をチェックしましょう。バージョンが表示されたらインストール済みということなのでそのまま開発をすることができます</p>
+    <%# ★ここを変更★ サブタイトル・説明文 %>
+    <p class="subtitle">
+      このWebサイトではElieが Ruby on Rails の学んだことを記録していて、<br>
+      今後Ruby on Railsを学ぶ方のために少しでも参考になればと思います(･ω･)
+    </p>
+  </div>
 
-<pre>
-$ ruby -v
-ruby 3.4.7 
+  <%# ========== メインコンテンツ ========== %>
+  <div class="content-section">
+
+    <%# ========== セクション1：学習内容一覧 ========== %>
+    <h2 class="section-title">
+      <%# ★ここを変更★ セクションタイトル %>
+      このWebサイトで学べること一覧( *¯ ꒳¯*)
+    </h2>
+
+    <%# ★ここを変更★ 学習トピックのリスト %>
+    <%# リストを追加・削除する場合は <li>...</li> をコピー&ペーストしてください %>
+    <ul class="topic-list">
+      <li>Rubyってなに？</li>
+      <li>MVCとは？</li>
+      <li>ルーティングからコントローラーへの処理の流れ</li>
+      <li>レンダリングでおしゃれに (*'ω' *)</li>
+      <li>ヘルパー関数はセキュリティ対策にもなる！</li>
+      <li>DBをつかってみよう！</li>
+      <li>ログイン機能を実装してみる</li>
+      <li><strong>↓ Elie独自の発展編(=ↀωↀ=)✧ ↓</strong></li>
+      <li>DBでSupabaseを使ってみよう！</li>
+      <li>Vercelにデプロイしてみよう！</li>
+      <li>このWebサイトはどのように作られてる？</li>
+      <li>クラウド(AWS)を使ってみる☁</li>
+      <li>クラウド(GoogleCloud)を使ってみる☁</li>
+    </ul>
+
+    <%# ★ここを変更★ 補足メッセージ %>
+    <div class="text-block">
+      <p>また今後も追加するかも(*ˊᵕˋ*)</p>
+    </div>
+
+    <%# 区切り線 %>
+    <hr class="divider">
+
+    <%# ========== セクション2：環境とセットアップ ========== %>
+    <h2 class="section-title">
+      <%# ★ここを変更★ セクションタイトル %>
+      筆者の環境とセットアップ ( ˙ω​˙ )ゞ
+    </h2>
+
+    <%# ★ここを変更★ 説明文 %>
+    <div class="text-block">
+      <p>
+        まず、筆者の環境はGoogle Cloud Shellを利用してます。Cloud Shellは初期セットアップ済みで簡単に始められるのでオススメです!
+      </p>
+      <p>
+        Google Cloudを利用したことない方はおそらく約4万5千円分ぐらいの無料クレジットが付与されると思うので、その枠で十分に開発が可能です。
+      </p>
+    </div>
+
+    <%# ========== サブセクション：Cloud Shellの起動 ========== %>
+    <h3 class="section-title" style="font-size: 1.4em;">
+      <%# ★ここを変更★ サブセクションタイトル %>
+      Cloud Shellの起動
+    </h3>
+
+    <%# ★ここを変更★ 説明文 %>
+    <div class="text-block">
+      <p>
+        Google Cloud Console にログインして、右上の<span class="highlight">Cloud Shell アイコン</span> をクリックするとターミナルが開くと思います。
+      </p>
+      <p>
+        以下のコマンドで環境をチェックしましょう。バージョンが表示されたらインストール済みということなのでそのまま開発をすることができます
+      </p>
+    </div>
+
+    <%# ★ここを変更★ コード例 %>
+    <%# コマンドやコードを表示したい場合はこのブロックを使います %>
+    <pre class="code-block">$ ruby -v
+ruby 3.4.7
 $ gem -v
-3.6.9
-</pre>
+3.6.9</pre>
 
-<h2>WSLやmacOSでのインストールは以下のWebサイトなどを参考にしてください m(_ _*)m </h2>
-<p>
-<a href="https://www.ruby-lang.org/ja/documentation/installation/" target="_blank">www.ruby-lang.org</a>
-</p>
-<p>
-<a href="https://dexall.co.jp/articles/?p=1540" target="_blank">dexall.co.jp</a>
-</p>
+    <%# ========== サブセクション：参考リンク ========== %>
+    <h3 class="section-title" style="font-size: 1.4em;">
+      <%# ★ここを変更★ サブセクションタイトル %>
+      WSLやmacOSでのインストールは以下のWebサイトなどを参考にしてください m(_ _*)m
+    </h3>
 
-<hr>
+    <%# ★ここを変更★ リンク集 %>
+    <%# リンクを追加する場合は、hrefの中にURL、タグの間にリンクテキストを入れます %>
+    <div class="text-block">
+      <p>
+        <a href="https://www.ruby-lang.org/ja/documentation/installation/" target="_blank">
+          Ruby公式 - インストールガイド (www.ruby-lang.org)
+        </a>
+      </p>
+      <p>
+        <a href="https://dexall.co.jp/articles/?p=1540" target="_blank">
+          Rubyインストール解説 (dexall.co.jp)
+        </a>
+      </p>
+    </div>
 
-<h2>Next! Rubyってなに？</h2>
-<ul>
-  <li><a href="/guides/ruby_overview">Rubyってなに？(゜-゜)</a></li>
-</ul>
+    <%# 区切り線 %>
+    <hr class="divider">
+
+    <%# ========== セクション3：次のステップ ========== %>
+    <h2 class="section-title">
+      <%# ★ここを変更★ セクションタイトル %>
+      Next! Rubyってなに？
+    </h2>
+
+    <%# ★ここを変更★ ナビゲーションリンク %>
+    <ul class="link-list">
+      <li>
+        <a href="/guides/ruby_overview">Rubyってなに？(゜-゜)</a>
+      </li>
+      <%# リンクを追加する場合は、上の<li>...</li>をコピーして追加してください %>
+    </ul>
+
+  </div>
+  <%# メインコンテンツ終了 %>
+
+</div>
+<%# ポートフォリオコンテナ終了 %>
 
 
+<%# =============================================
+    【新しいセクションを追加したい場合】
+
+    以下のテンプレートをコピー＆ペーストして使ってください：
+
+    <hr class="divider">
+
+    <h2 class="section-title">
+      新しいセクションのタイトル
+    </h2>
+
+    <div class="text-block">
+      <p>ここに説明文を書きます</p>
+    </div>
+
+    ============================================= %>

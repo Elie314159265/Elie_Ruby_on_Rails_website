@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   get "guides/ruby_overview"
 
   root to: redirect('/pages/index')
-  get 'pages/index', to: 'pages#index'
+  # get 'pages/index', to: 'pages#index'
 
   get "rails_doc/routing"
   get "rails_doc/migration"

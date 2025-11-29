@@ -1,0 +1,192 @@
+/* =============================================
+   ポートフォリオサイト用CSS
+   このファイルは基本的に変更不要です
+   ============================================= */
+
+/* 全体の基本設定 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', Meiryo, sans-serif;
+  line-height: 1.8;
+  color: #333;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  padding: 20px;
+}
+
+/* メインコンテナ */
+.portfolio-container {
+  max-width: 900px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+}
+
+/* ヘッダーセクション */
+.header-section {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 60px 40px;
+  text-align: center;
+}
+
+.header-section h1 {
+  font-size: 2.5em;
+  margin-bottom: 15px;
+  font-weight: 700;
+}
+
+.header-section .subtitle {
+  font-size: 1.1em;
+  opacity: 0.95;
+  line-height: 1.6;
+}
+
+/* コンテンツエリア */
+.content-section {
+  padding: 50px 40px;
+}
+
+/* セクションタイトル */
+.section-title {
+  font-size: 1.8em;
+  color: #667eea;
+  margin-bottom: 25px;
+  padding-bottom: 10px;
+  border-bottom: 3px solid #667eea;
+  font-weight: 600;
+}
+
+/* テキストブロック */
+.text-block {
+  margin-bottom: 30px;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 10px;
+  border-left: 4px solid #667eea;
+}
+
+.text-block p {
+  margin-bottom: 15px;
+}
+
+.text-block p:last-child {
+  margin-bottom: 0;
+}
+
+/* リストスタイル */
+.topic-list {
+  list-style: none;
+  margin-bottom: 30px;
+}
+
+.topic-list li {
+  padding: 15px 20px;
+  margin-bottom: 10px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border-left: 4px solid #667eea;
+  transition: all 0.3s ease;
+}
+
+.topic-list li:hover {
+  background: #e9ecef;
+  transform: translateX(5px);
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.2);
+}
+
+.topic-list li strong {
+  color: #764ba2;
+}
+
+/* コードブロック */
+.code-block {
+  background: #2d2d2d;
+  color: #f8f8f2;
+  padding: 20px;
+  border-radius: 8px;
+  overflow-x: auto;
+  margin-bottom: 20px;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.9em;
+  line-height: 1.5;
+}
+
+/* リンクスタイル */
+.link-list {
+  list-style: none;
+}
+
+.link-list li {
+  margin-bottom: 15px;
+}
+
+.link-list a {
+  display: inline-block;
+  padding: 12px 25px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  text-decoration: none;
+  border-radius: 25px;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.link-list a:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+/* 区切り線 */
+.divider {
+  margin: 50px 0;
+  border: none;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #667eea, transparent);
+}
+
+/* ハイライトテキスト */
+.highlight {
+  background: linear-gradient(transparent 60%, #ffd700 60%);
+  font-weight: 600;
+}
+
+/* 注意書きボックス */
+.note-box {
+  background: #fff3cd;
+  border: 2px solid #ffc107;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 25px;
+}
+
+.note-box h3 {
+  color: #856404;
+  margin-bottom: 10px;
+}
+
+/* レスポンシブデザイン */
+@media (max-width: 768px) {
+  .header-section {
+    padding: 40px 20px;
+  }
+
+  .header-section h1 {
+    font-size: 1.8em;
+  }
+
+  .content-section {
+    padding: 30px 20px;
+  }
+
+  .section-title {
+    font-size: 1.5em;
+  }
+}
