@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title>Elie's Portfolio (Preview)</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    
+    <!-- Tailwind CSS (CDN) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              // 水色ベースのカラーパレット
+              primary: '#e0f2fe', // sky-100 (全体の背景色)
+              secondary: '#bae6fd', // sky-200 (薄いアクセント)
+              accent: '#0284c7',  // sky-600 (ボタンやリンク文字色)
+              dark: '#0f172a',    // slate-900 (基本文字色)
+            },
+            fontFamily: {
+              sans: ['Helvetica Neue', 'Arial', 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Meiryo', 'sans-serif'],
+            },
+            animation: {
+              'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+            },
+            keyframes: {
+              fadeInUp: {
+                '0%': { opacity: '0', transform: 'translateY(20px)' },
+                '100%': { opacity: '1', transform: 'translateY(0)' },
+              }
+            }
+          }
+        }
+      }
+    </script>
+    
+    <!-- Google Fonts: Material Symbols -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+  </head>
+
+  <body class="bg-primary text-dark font-sans flex flex-col min-h-screen">
+    
+    <!-- ナビゲーションバー -->
+    <nav class="bg-white/90 backdrop-blur-md shadow-sm sticky top-0 z-50">
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16">
+          <div class="flex items-center">
+            <!-- ロゴ -->
+            <a href="#" class="flex items-center space-x-2 group">
+              <span class="material-symbols-outlined text-accent text-3xl group-hover:scale-110 transition-transform">rocket_launch</span>
+              <span class="text-xl font-bold tracking-wider text-gray-700 group-hover:text-accent transition-colors">Elie's Portfolio</span>
+            </a>
+          </div>
+          
+          <!-- PC用メニュー -->
+          <div class="hidden sm:flex sm:items-center sm:space-x-8">
+            <a href="#" class="text-gray-500 hover:text-accent px-3 py-2 rounded-md text-sm font-medium transition-colors">Home</a>
+            <a href="#" class="text-gray-500 hover:text-accent px-3 py-2 rounded-md text-sm font-medium transition-colors">About</a>
+            <a href="#" class="text-gray-500 hover:text-accent px-3 py-2 rounded-md text-sm font-medium transition-colors">Works</a>
+            <a href="#" class="bg-accent text-white hover:bg-sky-700 px-4 py-2 rounded-full text-sm font-medium transition-all shadow-md hover:shadow-lg">Blog</a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- メインコンテンツ -->
+    <main class="flex-grow w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+      
+      <!-- ヒーローセクション -->
+      <div class="text-center mb-16 animate-fade-in-up">
+        <span class="inline-block py-1 px-3 rounded-full bg-sky-100 text-accent text-xs font-semibold tracking-wide mb-4 border border-sky-200">
+          Welcome to my learning journey
+        </span>
+        <h1 class="text-3xl sm:text-5xl font-extrabold text-gray-800 mb-6 leading-tight">
+          Elie の <span class="text-accent relative inline-block">
+            Ruby on Rails
+            <svg class="absolute w-full h-3 -bottom-1 left-0 text-sky-200 -z-10" viewBox="0 0 100 10" preserveAspectRatio="none"><path d="M0 5 Q 50 10 100 5" stroke="currentColor" stroke-width="8" fill="none"/></svg>
+          </span> <br>
+          学習記録 (･ω･)
+        </h1>
+        <p class="text-gray-600 text-lg sm:text-xl max-w-2xl mx-auto leading-relaxed">
+          このWebサイトではElieが Ruby on Rails で学んだことを記録しています。<br>
+          今後Railsを学ぶ方のために、少しでも参考になれば嬉しいです！
+        </p>
+      </div>
+
+      <!-- 2カラムレイアウト -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+        <!-- メインカラム -->
+        <div class="lg:col-span-2 space-y-8">
+          
+          <!-- セクション1：学習トピック -->
+          <section class="bg-white rounded-2xl p-6 sm:p-8 shadow-lg shadow-sky-100/50 border border-sky-50">
+            <div class="flex items-center mb-6">
+              <span class="material-symbols-outlined text-accent text-3xl mr-3">school</span>
+              <h2 class="text-2xl font-bold text-gray-800">このサイトで学べること ( *¯ ꒳¯*)</h2>
+            </div>
+
+            <ul class="space-y-3">
+              <li class="flex items-start">
+                <span class="material-symbols-outlined text-sky-400 text-sm mt-1 mr-2">check_circle</span>
+                <span class="text-gray-700 font-medium">Rubyってなに？</span>
+              </li>
+              <li class="flex items-start">
+                <span class="material-symbols-outlined text-sky-400 text-sm mt-1 mr-2">check_circle</span>
+                <span class="text-gray-700 font-medium">MVCとは？</span>
+              </li>
+              <li class="flex items-start">
+                <span class="material-symbols-outlined text-sky-400 text-sm mt-1 mr-2">check_circle</span>
+                <span class="text-gray-700 font-medium">ルーティングからコントローラーへの処理の流れ</span>
+              </li>
+              <li class="flex items-start">
+                <span class="material-symbols-outlined text-sky-400 text-sm mt-1 mr-2">check_circle</span>
+                <span class="text-gray-700 font-medium">レンダリングでおしゃれに (*'ω' *)</span>
+              </li>
+              <li class="flex items-start">
+                <span class="material-symbols-outlined text-sky-400 text-sm mt-1 mr-2">check_circle</span>
+                <span class="text-gray-700 font-medium">ヘルパー関数はセキュリティ対策にもなる！</span>
+              </li>
+              <li class="flex items-start">
+                <span class="material-symbols-outlined text-sky-400 text-sm mt-1 mr-2">check_circle</span>
+                <span class="text-gray-700 font-medium">DBをつかってみよう！</span>
+              </li>
+              <li class="flex items-start">
+                <span class="material-symbols-outlined text-sky-400 text-sm mt-1 mr-2">check_circle</span>
+                <span class="text-gray-700 font-medium">ログイン機能を実装してみる</span>
+              </li>
+
+              <!-- 発展編 -->
+              <li class="mt-6 mb-2 pt-4 border-t border-dashed border-gray-200">
+                <span class="inline-block bg-accent text-white text-xs px-2 py-1 rounded mb-2">発展編 (=ↀωↀ=)✧</span>
+              </li>
+              
+              <li class="flex items-start">
+                <span class="material-symbols-outlined text-amber-400 text-sm mt-1 mr-2">star</span>
+                <span class="text-gray-700 font-medium">DBでSupabaseを使ってみよう！</span>
+              </li>
+              <li class="flex items-start">
+                <span class="material-symbols-outlined text-amber-400 text-sm mt-1 mr-2">star</span>
+                <span class="text-gray-700 font-medium">Vercelにデプロイしてみよう！</span>
+              </li>
+              <li class="flex items-start">
+                <span class="material-symbols-outlined text-amber-400 text-sm mt-1 mr-2">star</span>
+                <span class="text-gray-700 font-medium">このWebサイトはどのように作られてる？</span>
+              </li>
+              <li class="flex items-start">
+                <span class="material-symbols-outlined text-amber-400 text-sm mt-1 mr-2">star</span>
+                <span class="text-gray-700 font-medium">クラウド(AWS)を使ってみる☁</span>
+              </li>
+              <li class="flex items-start">
+                <span class="material-symbols-outlined text-amber-400 text-sm mt-1 mr-2">star</span>
+                <span class="text-gray-700 font-medium">クラウド(GoogleCloud)を使ってみる☁</span>
+              </li>
+            </ul>
+
+            <div class="mt-6 text-right text-sm text-gray-400">
+              また今後も追加するかも (*ˊᵕˋ*)
+            </div>
+          </section>
+
+          <!-- セクション2：Next Step -->
+          <section class="bg-gradient-to-r from-sky-500 to-indigo-600 rounded-2xl p-6 sm:p-8 shadow-lg text-white">
+            <h2 class="text-2xl font-bold mb-4 flex items-center">
+              <span class="material-symbols-outlined mr-3">arrow_forward</span>
+              Next! Rubyってなに？
+            </h2>
+            <p class="mb-6 opacity-90">まずはRuby言語自体の基本について、簡単な概要から見ていきましょう。</p>
+            
+            <a href="#" class="inline-flex items-center bg-white text-accent hover:bg-gray-50 font-bold py-3 px-6 rounded-xl transition-transform transform hover:-translate-y-1 shadow-md">
+              <span>Rubyの概要へ進む</span>
+              <span class="material-symbols-outlined ml-2 text-sm">arrow_outward</span>
+            </a>
+          </section>
+
+        </div>
+
+        <!-- サイドバー -->
+        <div class="lg:col-span-1 space-y-8">
+          
+          <!-- 環境情報カード -->
+          <section class="bg-white rounded-2xl p-6 shadow-md border border-sky-50">
+            <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center border-b border-gray-100 pb-2">
+              <span class="material-symbols-outlined text-gray-400 mr-2">terminal</span>
+              開発環境 ( ˙ω​˙ )ゞ
+            </h3>
+            
+            <div class="text-sm text-gray-600 mb-4">
+              <p class="mb-2">筆者は <strong>Google Cloud Shell</strong> を利用しています。初期設定済みで楽ちんです！</p>
+            </div>
+
+            <div class="bg-gray-800 rounded-lg p-4 text-gray-200 text-xs font-mono mb-4 overflow-x-auto">
+              <div class="flex mb-1">
+                <span class="text-green-400 mr-2">$</span>
+                <span>ruby -v</span>
+              </div>
+              <div class="text-gray-400 mb-2">ruby 3.4.7</div>
+              <div class="flex mb-1">
+                <span class="text-green-400 mr-2">$</span>
+                <span>gem -v</span>
+              </div>
+              <div class="text-gray-400">3.6.9</div>
+            </div>
+
+            <div class="bg-sky-50 rounded-lg p-3 text-xs text-sky-700">
+              <span class="font-bold">Tips:</span> Cloud Shellならブラウザだけで開発完結！
+            </div>
+          </section>
+
+          <!-- リンク集カード -->
+          <section class="bg-white rounded-2xl p-6 shadow-md border border-sky-50">
+            <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center border-b border-gray-100 pb-2">
+              <span class="material-symbols-outlined text-gray-400 mr-2">link</span>
+              Reference
+            </h3>
+            
+            <ul class="space-y-3 text-sm">
+              <li>
+                <a href="https://www.ruby-lang.org/ja/documentation/installation/" target="_blank" class="flex items-center text-gray-600 hover:text-accent group">
+                  <span class="material-symbols-outlined text-gray-300 group-hover:text-accent mr-2 text-base">open_in_new</span>
+                  Ruby公式インストールガイド
+                </a>
+              </li>
+              <li>
+                <a href="https://dexall.co.jp/articles/?p=1540" target="_blank" class="flex items-center text-gray-600 hover:text-accent group">
+                  <span class="material-symbols-outlined text-gray-300 group-hover:text-accent mr-2 text-base">open_in_new</span>
+                  Rubyインストール解説
+                </a>
+              </li>
+            </ul>
+          </section>
+
+        </div>
+
+      </div>
+    </main>
+
+    <!-- フッター -->
+    <footer class="bg-white mt-auto py-8 border-t border-sky-100">
+      <div class="max-w-5xl mx-auto px-4 text-center">
+        <p class="text-gray-400 text-sm">
+          &copy; 2025 Elie's Ruby on Rails Portfolio. <br class="sm:hidden">
+          All rights reserved.
+        </p>
+      </div>
+    </footer>
+
+  </body>
+</html>

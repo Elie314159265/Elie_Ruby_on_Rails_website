@@ -1,162 +1,167 @@
-<%# =============================================
-    ポートフォリオページテンプレート
+<%# ヒーローセクション %>
+<div class="text-center mb-16 animate-fade-in-up">
+  <span class="inline-block py-1 px-3 rounded-full bg-sky-100 text-accent text-xs font-semibold tracking-wide mb-4 border border-sky-200">
+    Welcome to my learning journey
+  </span>
+  <h1 class="text-3xl sm:text-5xl font-extrabold text-gray-800 mb-6 leading-tight">
+    Elie の <span class="text-accent relative inline-block">
+      Ruby on Rails
+      <svg class="absolute w-full h-3 -bottom-1 left-0 text-sky-200 -z-10" viewBox="0 0 100 10" preserveAspectRatio="none"><path d="M0 5 Q 50 10 100 5" stroke="currentColor" stroke-width="8" fill="none"/></svg>
+    </span> <br>
+    学習記録 (･ω･)
+  </h1>
+  <p class="text-gray-600 text-lg sm:text-xl max-w-2xl mx-auto leading-relaxed">
+    このWebサイトではElieが Ruby on Rails で学んだことを記録しています。<br>
+    今後Railsを学ぶ方のために、少しでも参考になれば嬉しいです！
+  </p>
+</div>
 
-    【使い方】
-    - 「★ここを変更★」というコメントの下の部分を編集してください
-    - HTMLタグ（<div>や<h1>など）は変更しないでください
-    - タグの中身のテキストだけを変更すればOKです
+<%# 2カラムレイアウト %>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
-    【例】
-    <h1>ここを変更</h1>
-    ↑「ここを変更」の部分だけを書き換えます
-    ============================================= %>
+  <%# メインカラム %>
+  <div class="lg:col-span-2 space-y-8">
 
-<div class="portfolio-container">
+    <%# セクション1：学習トピック %>
+    <section class="bg-white rounded-2xl p-6 sm:p-8 shadow-lg shadow-sky-100/50 border border-sky-50">
+      <div class="flex items-center mb-6">
+        <span class="material-symbols-outlined text-accent text-3xl mr-3">school</span>
+        <h2 class="text-2xl font-bold text-gray-800">このサイトで学べること ( *¯ ꒳¯*)</h2>
+      </div>
 
-  <%# ========== ヘッダーセクション（タイトルと説明） ========== %>
-  <div class="header-section">
-    <%# ★ここを変更★ メインタイトル %>
-    <h1>Elie の Ruby on Rails 学習記録 (･ω･)</h1>
+      <ul class="space-y-3">
+        <li class="flex items-start">
+          <span class="material-symbols-outlined text-sky-400 text-sm mt-1 mr-2">check_circle</span>
+          <span class="text-gray-700 font-medium">Rubyってなに？</span>
+        </li>
+        <li class="flex items-start">
+          <span class="material-symbols-outlined text-sky-400 text-sm mt-1 mr-2">check_circle</span>
+          <span class="text-gray-700 font-medium">MVCとは？</span>
+        </li>
+        <li class="flex items-start">
+          <span class="material-symbols-outlined text-sky-400 text-sm mt-1 mr-2">check_circle</span>
+          <span class="text-gray-700 font-medium">ルーティングからコントローラーへの処理の流れ</span>
+        </li>
+        <li class="flex items-start">
+          <span class="material-symbols-outlined text-sky-400 text-sm mt-1 mr-2">check_circle</span>
+          <span class="text-gray-700 font-medium">レンダリングでおしゃれに (*'ω' *)</span>
+        </li>
+        <li class="flex items-start">
+          <span class="material-symbols-outlined text-sky-400 text-sm mt-1 mr-2">check_circle</span>
+          <span class="text-gray-700 font-medium">ヘルパー関数はセキュリティ対策にもなる！</span>
+        </li>
+        <li class="flex items-start">
+          <span class="material-symbols-outlined text-sky-400 text-sm mt-1 mr-2">check_circle</span>
+          <span class="text-gray-700 font-medium">DBをつかってみよう！</span>
+        </li>
+        <li class="flex items-start">
+          <span class="material-symbols-outlined text-sky-400 text-sm mt-1 mr-2">check_circle</span>
+          <span class="text-gray-700 font-medium">ログイン機能を実装してみる</span>
+        </li>
 
-    <%# ★ここを変更★ サブタイトル・説明文 %>
-    <p class="subtitle">
-      このWebサイトではElieが Ruby on Rails の学んだことを記録していて、<br>
-      今後Ruby on Railsを学ぶ方のために少しでも参考になればと思います(･ω･)
-    </p>
-  </div>
+        <%# 発展編 %>
+        <li class="mt-6 mb-2 pt-4 border-t border-dashed border-gray-200">
+          <span class="inline-block bg-accent text-white text-xs px-2 py-1 rounded mb-2">発展編 (=ↀωↀ=)✧</span>
+        </li>
 
-  <%# ========== メインコンテンツ ========== %>
-  <div class="content-section">
+        <li class="flex items-start">
+          <span class="material-symbols-outlined text-amber-400 text-sm mt-1 mr-2">star</span>
+          <span class="text-gray-700 font-medium">DBでSupabaseを使ってみよう！</span>
+        </li>
+        <li class="flex items-start">
+          <span class="material-symbols-outlined text-amber-400 text-sm mt-1 mr-2">star</span>
+          <span class="text-gray-700 font-medium">Vercelにデプロイしてみよう！</span>
+        </li>
+        <li class="flex items-start">
+          <span class="material-symbols-outlined text-amber-400 text-sm mt-1 mr-2">star</span>
+          <span class="text-gray-700 font-medium">このWebサイトはどのように作られてる？</span>
+        </li>
+        <li class="flex items-start">
+          <span class="material-symbols-outlined text-amber-400 text-sm mt-1 mr-2">star</span>
+          <span class="text-gray-700 font-medium">クラウド(AWS)を使ってみる☁</span>
+        </li>
+        <li class="flex items-start">
+          <span class="material-symbols-outlined text-amber-400 text-sm mt-1 mr-2">star</span>
+          <span class="text-gray-700 font-medium">クラウド(GoogleCloud)を使ってみる☁</span>
+        </li>
+      </ul>
 
-    <%# ========== セクション1：学習内容一覧 ========== %>
-    <h2 class="section-title">
-      <%# ★ここを変更★ セクションタイトル %>
-      このWebサイトで学べること一覧( *¯ ꒳¯*)
-    </h2>
+      <div class="mt-6 text-right text-sm text-gray-400">
+        また今後も追加するかも (*ˊᵕˋ*)
+      </div>
+    </section>
 
-    <%# ★ここを変更★ 学習トピックのリスト %>
-    <%# リストを追加・削除する場合は <li>...</li> をコピー&ペーストしてください %>
-    <ul class="topic-list">
-      <li>Rubyってなに？</li>
-      <li>MVCとは？</li>
-      <li>ルーティングからコントローラーへの処理の流れ</li>
-      <li>レンダリングでおしゃれに (*'ω' *)</li>
-      <li>ヘルパー関数はセキュリティ対策にもなる！</li>
-      <li>DBをつかってみよう！</li>
-      <li>ログイン機能を実装してみる</li>
-      <li><strong>↓ Elie独自の発展編(=ↀωↀ=)✧ ↓</strong></li>
-      <li>DBでSupabaseを使ってみよう！</li>
-      <li>Vercelにデプロイしてみよう！</li>
-      <li>このWebサイトはどのように作られてる？</li>
-      <li>クラウド(AWS)を使ってみる☁</li>
-      <li>クラウド(GoogleCloud)を使ってみる☁</li>
-    </ul>
+    <%# セクション2：Next Step %>
+    <section class="bg-gradient-to-r from-sky-500 to-indigo-600 rounded-2xl p-6 sm:p-8 shadow-lg text-white">
+      <h2 class="text-2xl font-bold mb-4 flex items-center">
+        <span class="material-symbols-outlined mr-3">arrow_forward</span>
+        Next! Rubyってなに？
+      </h2>
+      <p class="mb-6 opacity-90">まずはRuby言語自体の基本について、簡単な概要から見ていきましょう。</p>
 
-    <%# ★ここを変更★ 補足メッセージ %>
-    <div class="text-block">
-      <p>また今後も追加するかも(*ˊᵕˋ*)</p>
-    </div>
-
-    <%# 区切り線 %>
-    <hr class="divider">
-
-    <%# ========== セクション2：環境とセットアップ ========== %>
-    <h2 class="section-title">
-      <%# ★ここを変更★ セクションタイトル %>
-      筆者の環境とセットアップ ( ˙ω​˙ )ゞ
-    </h2>
-
-    <%# ★ここを変更★ 説明文 %>
-    <div class="text-block">
-      <p>
-        まず、筆者の環境はGoogle Cloud Shellを利用してます。Cloud Shellは初期セットアップ済みで簡単に始められるのでオススメです!
-      </p>
-      <p>
-        Google Cloudを利用したことない方はおそらく約4万5千円分ぐらいの無料クレジットが付与されると思うので、その枠で十分に開発が可能です。
-      </p>
-    </div>
-
-    <%# ========== サブセクション：Cloud Shellの起動 ========== %>
-    <h3 class="section-title" style="font-size: 1.4em;">
-      <%# ★ここを変更★ サブセクションタイトル %>
-      Cloud Shellの起動
-    </h3>
-
-    <%# ★ここを変更★ 説明文 %>
-    <div class="text-block">
-      <p>
-        Google Cloud Console にログインして、右上の<span class="highlight">Cloud Shell アイコン</span> をクリックするとターミナルが開くと思います。
-      </p>
-      <p>
-        以下のコマンドで環境をチェックしましょう。バージョンが表示されたらインストール済みということなのでそのまま開発をすることができます
-      </p>
-    </div>
-
-    <%# ★ここを変更★ コード例 %>
-    <%# コマンドやコードを表示したい場合はこのブロックを使います %>
-    <pre class="code-block">$ ruby -v
-ruby 3.4.7
-$ gem -v
-3.6.9</pre>
-
-    <%# ========== サブセクション：参考リンク ========== %>
-    <h3 class="section-title" style="font-size: 1.4em;">
-      <%# ★ここを変更★ サブセクションタイトル %>
-      WSLやmacOSでのインストールは以下のWebサイトなどを参考にしてください m(_ _*)m
-    </h3>
-
-    <%# ★ここを変更★ リンク集 %>
-    <%# リンクを追加する場合は、hrefの中にURL、タグの間にリンクテキストを入れます %>
-    <div class="text-block">
-      <p>
-        <a href="https://www.ruby-lang.org/ja/documentation/installation/" target="_blank">
-          Ruby公式 - インストールガイド (www.ruby-lang.org)
-        </a>
-      </p>
-      <p>
-        <a href="https://dexall.co.jp/articles/?p=1540" target="_blank">
-          Rubyインストール解説 (dexall.co.jp)
-        </a>
-      </p>
-    </div>
-
-    <%# 区切り線 %>
-    <hr class="divider">
-
-    <%# ========== セクション3：次のステップ ========== %>
-    <h2 class="section-title">
-      <%# ★ここを変更★ セクションタイトル %>
-      Next! Rubyってなに？
-    </h2>
-
-    <%# ★ここを変更★ ナビゲーションリンク %>
-    <ul class="link-list">
-      <li>
-        <a href="/guides/ruby_overview">Rubyってなに？(゜-゜)</a>
-      </li>
-      <%# リンクを追加する場合は、上の<li>...</li>をコピーして追加してください %>
-    </ul>
+      <%= link_to "/guides/ruby_overview", class: "inline-flex items-center bg-white text-accent hover:bg-gray-50 font-bold py-3 px-6 rounded-xl transition-transform transform hover:-translate-y-1 shadow-md" do %>
+        <span>Rubyの概要へ進む</span>
+        <span class="material-symbols-outlined ml-2 text-sm">arrow_outward</span>
+      <% end %>
+    </section>
 
   </div>
-  <%# メインコンテンツ終了 %>
+
+  <%# サイドバー %>
+  <div class="lg:col-span-1 space-y-8">
+
+    <%# 環境情報カード %>
+    <section class="bg-white rounded-2xl p-6 shadow-md border border-sky-50">
+      <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center border-b border-gray-100 pb-2">
+        <span class="material-symbols-outlined text-gray-400 mr-2">terminal</span>
+        開発環境 ( ˙ω​˙ )ゞ
+      </h3>
+
+      <div class="text-sm text-gray-600 mb-4">
+        <p class="mb-2">筆者は <strong>Google Cloud Shell</strong> を利用しています。初期設定済みで楽ちんです！</p>
+      </div>
+
+      <div class="bg-gray-800 rounded-lg p-4 text-gray-200 text-xs font-mono mb-4 overflow-x-auto">
+        <div class="flex mb-1">
+          <span class="text-green-400 mr-2">$</span>
+          <span>ruby -v</span>
+        </div>
+        <div class="text-gray-400 mb-2">ruby 3.4.7</div>
+        <div class="flex mb-1">
+          <span class="text-green-400 mr-2">$</span>
+          <span>gem -v</span>
+        </div>
+        <div class="text-gray-400">3.6.9</div>
+      </div>
+
+      <div class="bg-sky-50 rounded-lg p-3 text-xs text-sky-700">
+        <span class="font-bold">Tips:</span> Cloud Shellならブラウザだけで開発完結！
+      </div>
+    </section>
+
+    <%# リンク集カード %>
+    <section class="bg-white rounded-2xl p-6 shadow-md border border-sky-50">
+      <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center border-b border-gray-100 pb-2">
+        <span class="material-symbols-outlined text-gray-400 mr-2">link</span>
+        Reference
+      </h3>
+
+      <ul class="space-y-3 text-sm">
+        <li>
+          <a href="https://www.ruby-lang.org/ja/documentation/installation/" target="_blank" class="flex items-center text-gray-600 hover:text-accent group">
+            <span class="material-symbols-outlined text-gray-300 group-hover:text-accent mr-2 text-base">open_in_new</span>
+            Ruby公式インストールガイド
+          </a>
+        </li>
+        <li>
+          <a href="https://dexall.co.jp/articles/?p=1540" target="_blank" class="flex items-center text-gray-600 hover:text-accent group">
+            <span class="material-symbols-outlined text-gray-300 group-hover:text-accent mr-2 text-base">open_in_new</span>
+            Rubyインストール解説
+          </a>
+        </li>
+      </ul>
+    </section>
+
+  </div>
 
 </div>
-<%# ポートフォリオコンテナ終了 %>
-
-
-<%# =============================================
-    【新しいセクションを追加したい場合】
-
-    以下のテンプレートをコピー＆ペーストして使ってください：
-
-    <hr class="divider">
-
-    <h2 class="section-title">
-      新しいセクションのタイトル
-    </h2>
-
-    <div class="text-block">
-      <p>ここに説明文を書きます</p>
-    </div>
-
-    ============================================= %>

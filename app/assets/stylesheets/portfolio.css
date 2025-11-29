@@ -13,10 +13,10 @@
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', Meiryo, sans-serif;
   line-height: 1.8;
-  color: #333;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #0f172a;
+  background: #e0f2fe;
   min-height: 100vh;
-  padding: 20px;
+  padding: 0;
 }
 
 /* メインコンテナ */

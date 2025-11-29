@@ -1,0 +1,492 @@
+生成ファイルの説明
+Project_Design_and_Steps.md: プロジェクト全体の設計図（ディレクトリ構成、Gem選定、DB設計、開発手順、CI/CD、運用手順）。
+
+Gemfile: 必要なGem（Markdown描画、SEO、AWS連携など）を追加した定義ファイル。
+
+20250101000000_create_portfolio_tables.rb: 必要なテーブルを一括作成するマイグレーションファイル。
+
+routes.rb: 公開用と管理者用を分けたルーティング設計。
+
+markdown_helper.rb: シンタックスハイライト付きでMarkdownを変換するヘルパー。
+
+application.html.erb: ご要望の「水色と白」をベースにした、シンプルで清潔感のあるレイアウトテンプレート（Tailwind CSS使用）。
+
+posts_controller.rb: 記事のCRUDとMarkdownプレビュー機能を備えたコントローラー。
+
+deploy.yml: GitHub ActionsとKamalを使用したデプロイフロー定義。
+
+
+
+Project_Design_and_Steps.md
+ポートフォリオサイト設計書 & 開発ガイド1. ディレクトリ構成とGem選定Rails 8の標準構成をベースに、以下の機能拡張を行います。📁 主なディレクトリ構成案app/
+├── controllers/
+│   ├── admin/          # 管理者用（記事・実績の作成/編集）
+│   │   ├── base_controller.rb
+│   │   ├── posts_controller.rb
+│   │   └── projects_controller.rb
+│   ├── posts_controller.rb    # 公開用記事表示
+│   ├── projects_controller.rb # 公開用実績表示
+│   └── pages_controller.rb    # Top, About, Contact
+├── models/
+│   ├── user.rb         # 管理者（Rails 8 authentication）
+│   ├── post.rb         # ブログ記事
+│   └── project.rb      # ポートフォリオ実績
+├── helpers/
+│   └── markdown_helper.rb # Markdown変換ロジック
+└── views/
+    ├── admin/          # 管理画面用ビュー
+    └── ...             # 公開画面用ビュー
+💎 Gem選定理由Gem用途選定理由redcarpetMarkdown変換拡張性が高く、GitHub Flavored Markdownに対応しやすいため。rougeコードハイライトRuby製でRailsとの親和性が高く、軽量で高速。meta-tagsSEO対策動的なTitle/Description設定が容易で、OGP対応も標準で可能なため。aws-sdk-s3画像ストレージActiveStorageでS3を利用するために必須。image_processing画像加工アップロード画像のサイズ調整（サムネイル生成）用。kaminariページネーション標準的で設定が容易、Tailwind用のビューもコミュニティで提供されているため。2. データベース設計 (SQLite Production推奨)Rails 8では、個人のポートフォリオレベルであればPostgreSQLなどの外部DBサーバーを立てるよりも、SQLite (本番環境用) の使用が推奨されています。Kamalを使えばデータ永続化も容易で、何よりAWSのRDSコスト（月額数千円〜）をカットできます。テーブル定義users (管理者)Rails 8 rails generate authentication コマンドで生成される標準スキーマを利用。email_address: string, uniquepassword_digest: stringsessions: (関連テーブル)posts (技術ブログ)ColumnTypeNotetitlestring記事タイトルslugstringURL用スラッグ (例: rails-8-release)。SEOに有利bodytextMarkdown本文statusinteger公開状態 (0: draft, 1: published)published_atdatetime公開日categorystringカテゴリ (例: Rails, AWS)projects (ポートフォリオ)ColumnTypeNotetitlestringプロジェクト名descriptiontext解説 (Markdown可)urlstring成果物URLgithub_urlstringリポジトリURLtech_stackstring使用技術 (カンマ区切り等)imagesattachmentActiveStorageで紐付け5. 開発ステップ (推奨手順)Phase 1: ベース機能の実装認証機能の導入:rails generate authentication
+rails db:migrate
+これでログイン機能、セッション管理が自動生成されます。Scaffold/Model作成:rails g scaffold Admin::Post title:string slug:string body:text status:integer published_at:datetime
+rails g model Project title:string description:text url:string github_url:string tech_stack:string
+ActiveStorage設定:config/storage.yml の amazon セクションを有効化し、認証情報を環境変数 (RAILS_MASTER_KEY または ENV) に設定。Phase 2: デザインとフロントエンド提供した application.html.erb を適用。各ViewをTailwind CSSでスタイリング。Markdownヘルパーの実装。Phase 3: デプロイ (AWS + Kamal)AWS準備:EC2インスタンス作成 (Ubuntu, t3.small推奨)。Elastic IP割り当て。セキュリティグループで HTTP(80), HTTPS(443), SSH(22) を許可。S3バケット作成 (画像用)。Kamal設定:config/deploy.yml にIPアドレスとドメイン、Dockerレジストリ情報を設定。kamal setup コマンドでサーバー構築。DNS設定:取得したドメインのAレコードをElastic IPに向ける。6. 今後の更新・保守手順記事の更新フロー/admin にアクセスしログイン。Markdownエディタで記事執筆。プレビュータブで表示確認。画像をドラッグ&ドロップ（ActiveStorage Direct Upload実装推奨、今回は基本実装のみ）。「公開」ステータスで保存 → 即座に本番反映。アプリケーションの更新フローコード修正後、ローカルで以下のコマンドを打つだけです（GitHub Actions化も可能）。kamal deploy
+これにより、Dockerイメージのビルド、レジストリへのPush、EC2上のコンテナ入れ替えが自動で行われます。ダウンタイムはほぼゼロです。
+
+Gemfile
+source "https://rubygems.org"
+
+# Rails 8.1.1
+gem "rails", "~> 8.1.1"
+
+# Propshaft for asset pipeline
+gem "propshaft"
+
+# SQLite3 for Active Record (Production ready in Rails 8)
+gem "sqlite3", ">= 2.1"
+
+# Puma web server
+gem "puma", ">= 5.0"
+
+# JavaScript / Hotwire
+gem "importmap-rails"
+gem "turbo-rails"
+gem "stimulus-rails"
+
+# Utilities
+gem "jbuilder"
+gem "tzinfo-data", platforms: %i[ windows jruby ]
+
+# Solid Stack (Cache, Queue, Cable)
+gem "solid_cache"
+gem "solid_queue"
+gem "solid_cable"
+
+# Deployment
+gem "kamal", require: false
+gem "thruster", require: false
+
+# --- Added for Portfolio ---
+
+# Markdown Rendering
+gem "redcarpet"
+# Syntax Highlighting
+gem "rouge"
+
+# SEO
+gem "meta-tags"
+
+# Pagination
+gem "kaminari"
+
+# Image Processing (Required for Active Storage variants)
+gem "image_processing", "~> 1.2"
+
+# AWS S3 (For Active Storage in Production)
+gem "aws-sdk-s3", require: false
+
+group :development, :test do
+  gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
+  gem "bundler-audit", require: false
+  gem "brakeman", require: false
+  gem "rubocop-rails-omakase", require: false
+end
+
+group :development do
+  gem "web-console"
+end
+
+group :test do
+  gem "capybara"
+  gem "selenium-webdriver"
+end
+
+
+CreateTables
+class CreatePortfolioTables < ActiveRecord::Migration[8.0]
+  def change
+    # ブログ記事テーブル
+    create_table :posts do |t|
+      t.string :title, null: false
+      t.string :slug, null: false, index: { unique: true } # URL用 (例: /posts/ruby-overview)
+      t.text :body
+      t.string :category
+      t.integer :status, default: 0, null: false # 0: draft, 1: published
+      t.datetime :published_at
+
+      t.timestamps
+    end
+
+    # ポートフォリオ実績テーブル
+    create_table :projects do |t|
+      t.string :title, null: false
+      t.text :description
+      t.string :url
+      t.string :github_url
+      t.string :tech_stack # "Ruby, Rails, AWS" などの文字列
+
+      t.timestamps
+    end
+
+    # ユーザーテーブル (Rails 8 authentication用)
+    # 既に rails generate authentication を実行済みの場合は不要ですが、念のため記載
+    unless table_exists?(:users)
+      create_table :users do |t|
+        t.string :email_address, null: false, index: { unique: true }
+        t.string :password_digest, null: false
+
+        t.timestamps
+      end
+    end
+    
+    unless table_exists?(:sessions)
+      create_table :sessions do |t|
+        t.references :user, null: false, foreign_key: true
+        t.string :ip_address
+        t.string :user_agent
+
+        t.timestamps
+      end
+    end
+  end
+end
+
+
+
+
+Routes
+Rails.application.routes.draw do
+  # 公開側
+  root "pages#index"
+  get "about", to: "pages#about"
+  
+  # ブログ記事 (SEOのために slug を使用)
+  resources :posts, only: [:index, :show], param: :slug
+  
+  # ポートフォリオ
+  resources :projects, only: [:index, :show]
+
+  # 管理者認証 (Rails 8 authentication)
+  resource :session
+  resources :passwords, param: :token
+  
+  # 管理者用画面
+  namespace :admin do
+    root to: "dashboard#index"
+    resources :posts do
+      post :preview, on: :collection # Markdownプレビュー用
+    end
+    resources :projects
+  end
+
+  # Health check
+  get "up" => "rails/health#show", as: :rails_health_check
+end
+
+
+
+MarkdownHelper
+module MarkdownHelper
+  require 'redcarpet'
+  require 'rouge'
+  require 'rouge/plugins/redcarpet'
+
+  class HTMLWithRouge < Redcarpet::Render::HTML
+    include Rouge::Plugins::Redcarpet
+  end
+
+  def markdown(text)
+    return "" unless text.present?
+
+    render_options = {
+      filter_html:     false, # HTMLタグを許可
+      hard_wrap:       true,  # 改行を<br>に変換
+      link_attributes: { rel: 'nofollow', target: "_blank" }
+    }
+
+    renderer = HTMLWithRouge.new(render_options)
+
+    extensions = {
+      autolink:           true,
+      fenced_code_blocks: true, # ```でのコードブロック
+      lax_spacing:        true,
+      no_intra_emphasis:  true,
+      strikethrough:      true,
+      superscript:        true,
+      tables:             true
+    }
+
+    Redcarpet::Markdown.new(renderer, extensions).render(text).html_safe
+  end
+end
+
+
+
+Layout
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <title><%= content_for(:title) || "Elie's Portfolio" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    
+    <%# SEO meta tags %>
+    <%= display_meta_tags site: 'Elie\'s Portfolio', reverse: true %>
+
+    <%# Tailwind CSS (CDN) %>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: '#e0f2fe', 
+              secondary: '#bae6fd',
+              accent: '#0284c7',
+              dark: '#0f172a',
+            },
+            fontFamily: {
+              sans: ['Helvetica Neue', 'Arial', 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Meiryo', 'sans-serif'],
+            }
+          }
+        }
+      }
+    </script>
+    
+    <%# Google Fonts %>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+
+    <%# Markdown Styles (Github Flavored Markdown風) %>
+    <style>
+      .markdown-body h2 { font-size: 1.5rem; font-weight: 700; margin-top: 2rem; margin-bottom: 1rem; border-bottom: 2px solid #0284c7; padding-bottom: 0.3rem; color: #1e293b; }
+      .markdown-body h3 { font-size: 1.25rem; font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.75rem; color: #334155; }
+      .markdown-body p { margin-bottom: 1rem; line-height: 1.8; color: #334155; }
+      .markdown-body ul { list-style-type: disc; padding-left: 1.5rem; margin-bottom: 1rem; color: #334155; }
+      .markdown-body ol { list-style-type: decimal; padding-left: 1.5rem; margin-bottom: 1rem; color: #334155; }
+      .markdown-body a { color: #0284c7; text-decoration: underline; }
+      .markdown-body a:hover { color: #0369a1; }
+      .markdown-body pre { background-color: #1e293b; color: #f8fafc; padding: 1rem; border-radius: 0.5rem; overflow-x: auto; margin-bottom: 1.5rem; }
+      .markdown-body code { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; background-color: #f1f5f9; padding: 0.2rem 0.4rem; border-radius: 0.25rem; color: #0f172a; font-size: 0.875em; }
+      .markdown-body pre code { background-color: transparent; color: inherit; padding: 0; font-size: 1em; }
+      .markdown-body blockquote { border-left: 4px solid #cbd5e1; padding-left: 1rem; color: #64748b; font-style: italic; margin-bottom: 1rem; }
+      .markdown-body img { max-width: 100%; height: auto; border-radius: 0.5rem; margin: 1.5rem 0; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+    </style>
+
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body class="bg-primary text-dark font-sans flex flex-col min-h-screen">
+    
+    <%# Navigation %>
+    <nav class="bg-white/90 backdrop-blur-md shadow-sm sticky top-0 z-50">
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16">
+          <div class="flex items-center">
+            <%= link_to root_path, class: "flex items-center space-x-2 group" do %>
+              <span class="material-symbols-outlined text-accent text-3xl group-hover:scale-110 transition-transform">rocket_launch</span>
+              <span class="text-xl font-bold tracking-wider text-gray-700 group-hover:text-accent transition-colors">Elie's Portfolio</span>
+            <% end %>
+          </div>
+          
+          <div class="hidden sm:flex sm:items-center sm:space-x-8">
+            <%= link_to "Home", root_path, class: "text-gray-500 hover:text-accent px-3 py-2 rounded-md text-sm font-medium transition-colors" %>
+            <%= link_to "About", about_path, class: "text-gray-500 hover:text-accent px-3 py-2 rounded-md text-sm font-medium transition-colors" %>
+            <%= link_to "Projects", projects_path, class: "text-gray-500 hover:text-accent px-3 py-2 rounded-md text-sm font-medium transition-colors" %>
+            <%= link_to "Blog", posts_path, class: "bg-accent text-white hover:bg-sky-700 px-4 py-2 rounded-full text-sm font-medium transition-all shadow-md hover:shadow-lg" %>
+            
+            <% if authenticated? %>
+              <%= link_to "Admin", admin_root_path, class: "text-xs text-gray-400 hover:text-accent ml-4 border border-gray-200 px-2 py-1 rounded" %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <%# Flash Messages %>
+    <% flash.each do |key, value| %>
+      <div class="max-w-5xl mx-auto px-4 mt-4 animate-fade-in-up">
+        <% color_class = key == 'notice' ? 'bg-sky-100 text-sky-800 border-sky-200' : 'bg-red-100 text-red-800 border-red-200' %>
+        <div class="<%= color_class %> px-4 py-3 rounded-lg border flex items-center shadow-sm">
+          <span class="material-symbols-outlined mr-2 text-lg"><%= key == 'notice' ? 'check_circle' : 'error' %></span>
+          <span class="text-sm font-medium"><%= value %></span>
+        </div>
+      </div>
+    <% end %>
+
+    <%# Main Content %>
+    <main class="flex-grow w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+      <%= yield %>
+    </main>
+
+    <%# Footer %>
+    <footer class="bg-white mt-auto py-8 border-t border-sky-100">
+      <div class="max-w-5xl mx-auto px-4 text-center">
+        <p class="text-gray-400 text-sm">
+          &copy; <%= Time.current.year %> Elie's Ruby on Rails Portfolio. <br class="sm:hidden">
+          All rights reserved.
+        </p>
+      </div>
+    </footer>
+
+  </body>
+</html>
+
+
+
+AdminPostsController
+module Admin
+  class PostsController < ApplicationController
+    # 認証ガード（認証機能実装後にコメントアウトを外す）
+    # allow_unauthenticated_access only: [] 
+    # before_action :resume_session
+    # before_action :require_authentication
+
+    before_action :set_post, only: %i[show edit update destroy]
+    layout 'application' # 管理画面も同じレイアウトを使用（別レイアウト作成も可）
+
+    def index
+      @posts = Post.order(created_at: :desc).page(params[:page])
+    end
+
+    def new
+      @post = Post.new
+    end
+
+    def edit
+    end
+
+    def create
+      @post = Post.new(post_params)
+
+      if @post.save
+        redirect_to admin_posts_path, notice: "記事を作成しました！"
+      else
+        render :new, status: :unprocessable_entity
+      end
+    end
+
+    def update
+      if @post.update(post_params)
+        redirect_to admin_posts_path, notice: "記事を更新しました！"
+      else
+        render :edit, status: :unprocessable_entity
+      end
+    end
+
+    def destroy
+      @post.destroy
+      redirect_to admin_posts_path, notice: "記事を削除しました。"
+    end
+
+    # リアルタイムプレビュー用
+    def preview
+      @body = params[:body]
+      respond_to do |format|
+        format.turbo_stream
+      end
+    end
+
+    private
+
+    def set_post
+      @post = Post.find(params[:id])
+    end
+
+    def post_params
+      params.require(:post).permit(:title, :slug, :body, :category, :status, :published_at)
+    end
+  end
+end
+
+
+
+DeployWorkflow
+name: Deploy to AWS
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    # 権限設定（GitHub Packages読み込みなど）
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install SSH key
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          known_hosts: ${{ secrets.SSH_KNOWN_HOSTS }}
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.4.7
+          bundler-cache: true
+
+      - name: Install Kamal
+        run: gem install kamal
+
+      - name: Deploy with Kamal
+        env:
+          RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
+          KAMAL_REGISTRY_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+        run: kamal deploy
+
+
+
+
+
+
+実装のポイント解説
+MarkdownとRedcarpet (markdown_helper.rb)
+
+hard_wrap: true 設定により、標準的なMarkdownの改行挙動を実現しています。
+
+Rouge と組み合わせることで、エンジニアのポートフォリオに必須の「コードのシンタックスハイライト」を綺麗に表示します。
+
+HTML/CSSテンプレート (application.html.erb)
+
+bg-primary (薄い水色: #e0f2fe) を背景に採用し、bg-white のカードコンポーネントを配置することで、清潔感と可読性を確保しました。
+
+sticky top-0 でナビゲーションバーを固定し、スマホでの閲覧時もメニューにアクセスしやすくしています。
+
+SEO用の display_meta_tags を配置済みです。各Controllerで set_meta_tags title: "記事名" のように書くだけで反映されます。
+
+CI/CD (deploy.yml)
+
+Rails 8標準のデプロイツール Kamal を使用する構成です。
+
+GitHub Actions上でDockerイメージをビルドし、GHCR (GitHub Container Registry) にプッシュした後、AWS EC2へデプロイコマンドを発行します。これにより、ローカルマシンのスペックに依存せず、安全なデプロイが可能になります。
