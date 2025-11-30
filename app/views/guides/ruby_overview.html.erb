@@ -17,9 +17,11 @@
   </h2>
 
   <p class="text-gray-700 mb-4 leading-relaxed">
-    Ruby on Railsは、Rubyで書かれたWebアプリケーションフレームワークです。
-    シンプルで効率的かつ効率的な開発ができます(｀・ω・´)
-    ↓以下のコマンドで新しいRailsアプリを作成できます↓
+    <p>Ruby on Railsは、Rubyで書かれたWebアプリケーションフレームワークです。</p>
+    <p>例えるなら <strong>「システム開発の『高級システムキッチン!!』」</strong></p>
+    <p>ゼロからカマドを作ったり、調理器具を鉄から打って作る必要はありません。Railsには、プロのシェフ(開発者)が必要とする「コンロ」「冷蔵庫」「調理器具」があらかじめ最適な配置で用意されています!</p>
+    <p>そのため、私たちは「料理（アプリの機能）」を作ることにだけ集中すれば良いのです(｀・ω・´)</p>
+    ↓ 以下のコマンド一発で、そのキッチンセット（アプリの土台）を用意できます ↓
   </p>
 
   <%# コードブロック例 %>
@@ -36,29 +38,232 @@
     基本的なコマンド
   </h2>
 
-  <ul class="space-y-2 mb-6">
-    <li class="flex items-start">
-      <span class="text-sky-500 mr-2">$</span>
-      <span class="text-gray-700"><code class="bg-gray-100 px-2 py-1 rounded">rails server</code> - サーバーを起動</span>
-    </li>
-    <li class="flex items-start">
-      <span class="text-sky-500 mr-2">$</span>
-      <span class="text-gray-700"><code class="bg-gray-100 px-2 py-1 rounded">rails generate</code> - コードを生成</span>
-    </li>
-    <li class="flex items-start">
-      <span class="text-sky-500 mr-2">$</span>
-      <span class="text-gray-700"><code class="bg-gray-100 px-2 py-1 rounded">rails console</code> - コンソールを起動</span>
-    </li>
-  </ul>
+  <p class="text-gray-700 mb-6 leading-relaxed">
+    Railsで開発するときによく使うコマンドをおさえておきましょう！
+  </p>
+
+  <div class="space-y-4 mb-6">
+    <%# rails server コマンド %>
+    <div class="border border-gray-200 rounded-lg p-4 hover:border-sky-300 transition-colors">
+      <div class="bg-gray-800 rounded-lg px-4 py-2 text-gray-200 text-sm font-mono mb-3 inline-block">
+        <span class="text-green-400">$</span> rails server
+      </div>
+      <p class="text-gray-700 leading-relaxed">
+        <strong>サーバーを起動</strong> - お店をオープンするイメージで、これでブラウザからアクセスできるようになります！<br>
+        起動後は<code class="bg-gray-100 px-2 py-1 rounded text-sm">'http://localhost<span>:</span>3000/'</code>でアクセス可能です。
+      </p>
+    </div>
+
+    <%# rails generate コマンド %>
+    <div class="border border-gray-200 rounded-lg p-4 hover:border-sky-300 transition-colors">
+      <div class="bg-gray-800 rounded-lg px-4 py-2 text-gray-200 text-sm font-mono mb-3 inline-block">
+        <span class="text-green-400">$</span> rails generate
+      </div>
+      <p class="text-gray-700 leading-relaxed">
+        <strong>コードを生成</strong> - 新しい機能の雛形を自動で作ってくれます！<br>
+        例: <code class="bg-gray-100 px-2 py-1 rounded text-sm">rails generate controller Welcome</code>
+      </p>
+    </div>
+
+    <%# rails console コマンド %>
+    <div class="border border-gray-200 rounded-lg p-4 hover:border-sky-300 transition-colors">
+      <div class="bg-gray-800 rounded-lg px-4 py-2 text-gray-200 text-sm font-mono mb-3 inline-block">
+        <span class="text-green-400">$</span> rails console
+      </div>
+      <p class="text-gray-700 leading-relaxed">
+        <strong>コンソールを起動</strong> - 裏側でデータベースと対話したり、実験したりするための場所。<br>
+        Rubyのコードを直接試すことができます。
+      </p>
+    </div>
+  </div>
 
   <%# Tips カード %>
   <div class="bg-sky-50 border-l-4 border-sky-500 p-4 rounded mb-6">
     <p class="text-sm text-sky-800">
-      <span class="font-bold">Tips:</span> rails sでサーバーを起動できます（短縮形）
+      <span class="font-bold">Tips:</span> コマンドには短縮形があります！<br>
+      <code class="bg-sky-100 px-2 py-1 rounded mt-1 inline-block">rails s</code> (server)、
+      <code class="bg-sky-100 px-2 py-1 rounded">rails g</code> (generate)、
+      <code class="bg-sky-100 px-2 py-1 rounded">rails c</code> (console) と入力できます。
     </p>
   </div>
 
 </div>
+
+<%# MVCの解説 %>
+<div class="bg-white rounded-2xl p-8 shadow-lg mb-8">
+
+  <h2 class="text-2xl font-bold text-gray-800 mb-4 border-b-2 border-sky-500 pb-2">
+    MVCフレームワークとは？？(゜-゜)
+  </h2>
+
+  <p class="text-gray-700 mb-6 leading-relaxed">
+    MVCとは<strong>Model・View・Controller</strong>の頭文字で、<strong>「役割分担をして開発しましょう」</strong>という設計思想です。<br>
+    RailsはこのMVCを採用しています！
+  </p>
+
+  <%# レストランの例え %>
+  <div class="bg-gradient-to-r from-blue-50 to-sky-50 rounded-lg p-6 mb-6">
+    <h3 class="text-lg font-bold text-gray-800 mb-4">レストランで例えると...</h3>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+      <div class="bg-white rounded-lg p-4 shadow-sm">
+        <div class="font-bold text-black-600 mb-2">User（Webブラウザ）</div>
+        <p class="text-sm text-gray-700">お客さん</p>
+      </div>
+      <div class="bg-white rounded-lg p-4 shadow-sm">
+        <div class="font-bold text-black-600 mb-2">Controller</div>
+        <p class="text-sm text-gray-700">店長（ウェイター）</p>
+      </div>
+      <div class="bg-white rounded-lg p-4 shadow-sm">
+        <div class="font-bold text-black-600 mb-2">Model</div>
+        <p class="text-sm text-gray-700">シェフ・食材庫番</p>
+      </div>
+      <div class="bg-white rounded-lg p-4 shadow-sm">
+        <div class="font-bold text-black-600 mb-2">View</div>
+        <p class="text-sm text-gray-700">盛り付け係</p>
+      </div>
+    </div>
+
+    <h4 class="font-bold text-gray-800 mb-3">[ 注文の流れイメージ ]</h4>
+    <ol class="space-y-2 text-sm text-gray-700">
+      <li class="flex items-start">
+        <span class="font-bold text-sky-600 mr-2 min-w-[1.5rem]">1.</span>
+        <span><strong>User：</strong>「オムライスください（URLにアクセス）」</span>
+      </li>
+      <li class="flex items-start">
+        <span class="font-bold text-sky-600 mr-2 min-w-[1.5rem]">2.</span>
+        <span><strong>Controller（店長）：</strong>「オーダー入りました！Modelさん、卵と米（データ）をお願い！」</span>
+      </li>
+      <li class="flex items-start">
+        <span class="font-bold text-sky-600 mr-2 min-w-[1.5rem]">3.</span>
+        <span><strong>Model（シェフ）：</strong>「あいよ！（DBからデータを取り出し、加工して店長に渡す）」</span>
+      </li>
+      <li class="flex items-start">
+        <span class="font-bold text-sky-600 mr-2 min-w-[1.5rem]">4.</span>
+        <span><strong>Controller（店長）：</strong>「ありがとう。次はViewさん、これをお皿に綺麗に盛って！」</span>
+      </li>
+      <li class="flex items-start">
+        <span class="font-bold text-sky-600 mr-2 min-w-[1.5rem]">5.</span>
+        <span><strong>View（盛り付け）：</strong>「了解！（HTMLというお皿にデータを載せてページを作る）」</span>
+      </li>
+      <li class="flex items-start">
+        <span class="font-bold text-sky-600 mr-2 min-w-[1.5rem]">6.</span>
+        <span><strong>Controller（店長）：</strong>「へいお待ち！（Userに画面を表示）」</span>
+      </li>
+    </ol>
+  </div>
+
+  <%# 技術的な説明 %>
+  <div class="bg-gray-50 rounded-lg p-6 mb-4">
+    <h4 class="font-bold text-gray-800 mb-4">技術的な役割分担</h4>
+    <div class="bg-gray-800 rounded-lg p-4 text-gray-200 text-sm font-mono mb-4 overflow-x-auto">
+      <div>[Webブラウザ] ---Request---> [Controller]</div>
+      <div>[Controller] <---Data---> [Model] <---SQL---> [DB]</div>
+      <div>[Controller] ---Data---> [View] ---HTML---> [Webブラウザ]</div>
+    </div>
+    <div class="space-y-2 text-gray-700">
+      <p><strong>Model</strong> = データ担当</p>
+      <p><strong>View</strong> = 見た目担当</p>
+      <p><strong>Controller</strong> = 司令塔</p>
+    </div>
+  </div>
+
+  <p class="text-sm text-gray-600 italic">
+    この図式は、開発しながら徐々に体感で分かってきます。筆者もアプリを作りながら「仕事が早い君が店長か！見た目がおいしそうだ、君が盛り付け役か！おいしすぎる、君がシェフか！」と理解しました(*‘ω‘ *)
+  </p>
+
+</div>
+
+<%# フォルダ構造の解説 %>
+<div class="bg-white rounded-2xl p-8 shadow-lg mb-8">
+
+  <h2 class="text-2xl font-bold text-gray-800 mb-4 border-b-2 border-sky-500 pb-2">
+    Railsアプリのフォルダの役割は？？(゜-゜)
+  </h2>
+
+  <p class="text-gray-700 mb-6 leading-relaxed">
+    <code class="bg-gray-100 px-2 py-1 rounded">$ rails new</code> でアプリを作ると大量のファイルが生成されます。<br>
+    「うっ、何この大量のファイルたち！」と焦る必要はないです。<br>
+    まずは以下の主要な場所だけ覚えればOKです！
+  </p>
+
+  <div class="bg-gradient-to-r from-blue-50 to-sky-50 rounded-lg p-6 mb-6">
+    <h3 class="text-lg font-bold text-gray-800 mb-4">家の間取りで例えると...</h3>
+
+    <div class="space-y-4">
+      <%# app/ %>
+      <div class="bg-white rounded-lg p-5 shadow-sm border-l-4 border-sky-500">
+        <div class="flex items-center mb-3">
+          <span class="text-2xl mr-3"></span>
+          <div>
+            <h4 class="font-bold text-gray-800 text-lg">app/</h4>
+            <p class="text-sm text-sky-600">【リビング・居住スペース】</p>
+          </div>
+        </div>
+        <p class="text-gray-700 mb-3">私たちがコードを書くメインの場所です。</p>
+        <div class="space-y-1 text-sm text-gray-600 ml-4">
+          <p><code class="bg-gray-100 px-2 py-1 rounded">models/</code> - データ担当（Model）の部屋</p>
+          <p><code class="bg-gray-100 px-2 py-1 rounded">views/</code> - 見た目担当（View）の部屋</p>
+          <p><code class="bg-gray-100 px-2 py-1 rounded">controllers/</code> - 司令塔（Controller）の部屋</p>
+        </div>
+      </div>
+
+      <%# config/ %>
+      <div class="bg-white rounded-lg p-5 shadow-sm border-l-4 border-sky-500">
+        <div class="flex items-center mb-3">
+          <span class="text-2xl mr-3"></span>
+          <div>
+            <h4 class="font-bold text-gray-800 text-lg">config/</h4>
+            <p class="text-sm text-sky-600">【設計図・ルールブック】</p>
+          </div>
+        </div>
+        <p class="text-gray-700 mb-2">アプリ全体の設定を置く場所です。</p>
+        <div class="bg-sky-50 rounded p-3 text-sm text-gray-700">
+          特に <code class="bg-purple-100 px-2 py-1 rounded font-bold">routes.rb</code> は「URLとControllerを繋ぐ地図」のような超重要ファイルです。
+        </div>
+      </div>
+
+      <%# db/ %>
+      <div class="bg-white rounded-lg p-5 shadow-sm border-l-4 border-sky-500">
+        <div class="flex items-center mb-3">
+          <span class="text-2xl mr-3"></span>
+          <div>
+            <h4 class="font-bold text-gray-800 text-lg">db/</h4>
+            <p class="text-sm text-sky-600">【倉庫】</p>
+          </div>
+        </div>
+        <p class="text-gray-700">データベースに関するファイルが入ります。</p>
+      </div>
+
+      <%# Gemfile %>
+      <div class="bg-white rounded-lg p-5 shadow-sm border-l-4 border-sky-500">
+        <div class="flex items-center mb-3">
+          <span class="text-2xl mr-3"></span>
+          <div>
+            <h4 class="font-bold text-gray-800 text-lg">Gemfile</h4>
+            <p class="text-sm text-sky-600">【道具カタログ】</p>
+          </div>
+        </div>
+        <p class="text-gray-700">アプリで使うライブラリ（Gem）を管理するリストです。</p>
+      </div>
+
+      <%# bin/ %>
+      <div class="bg-white rounded-lg p-5 shadow-sm border-l-4 border-sky-400">
+        <div class="flex items-center mb-3">
+          <span class="text-2xl mr-3"></span>
+          <div>
+            <h4 class="font-bold text-gray-800 text-lg">bin/</h4>
+            <p class="text-sm text-sky-600">【スイッチ類】</p>
+          </div>
+        </div>
+        <p class="text-gray-700">railsコマンドなどの実行ファイル置き場です（普段あまり触りません）。</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
 
 <%# ナビゲーション - 前後の記事へのリンク %>
 <div class="flex justify-between mt-8">
