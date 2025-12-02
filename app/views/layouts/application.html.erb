@@ -66,7 +66,17 @@
     <nav class="bg-white/90 backdrop-blur-md shadow-sm sticky top-0 z-50">
       <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
-          <div class="flex items-center">
+          <div class="flex items-center space-x-4">
+            <%# Mobile Menu Button %>
+            <button id="mobile-menu-btn" class="lg:hidden text-gray-700 hover:text-accent focus:outline-none">
+              <span class="material-symbols-outlined text-3xl">menu</span>
+            </button>
+
+            <%# Desktop Sidebar Toggle Button %>
+            <button id="desktop-sidebar-toggle" class="hidden lg:block text-gray-700 hover:text-accent focus:outline-none transition-colors">
+              <span class="material-symbols-outlined text-2xl">menu</span>
+            </button>
+
             <%= link_to root_path, class: "flex items-center space-x-2 group" do %>
               <span class="material-symbols-outlined text-accent text-3xl group-hover:scale-110 transition-transform"></span>
               <span class="text-xl font-bold tracking-wider text-gray-700 group-hover:text-accent transition-colors">Elie's Portfolio</span>
@@ -83,6 +93,92 @@
       </div>
     </nav>
 
+    <%# Mobile Sidebar Overlay %>
+    <div id="mobile-sidebar-overlay" class="fixed inset-0 bg-black/50 z-40 lg:hidden hidden"></div>
+
+    <%# Mobile Sidebar %>
+    <aside id="mobile-sidebar" class="fixed left-0 top-16 bottom-0 w-64 bg-white shadow-2xl z-50 lg:hidden transform -translate-x-full transition-transform duration-300 overflow-y-auto">
+      <nav class="p-6 space-y-6">
+        <%# Guides Section %>
+        <div>
+          <h3 class="text-xs font-bold uppercase tracking-wider text-gray-500 mb-3 flex items-center">
+            <span class="material-symbols-outlined text-sm mr-1">book</span>
+            Guides
+          </h3>
+          <ul class="space-y-2">
+            <%= link_to "/guides/ruby_overview", class: "flex items-center text-sm text-gray-700 hover:text-accent hover:bg-sky-50 px-3 py-2 rounded-lg transition-all #{request.path == '/guides/ruby_overview' ? 'bg-sky-100 text-accent font-medium' : ''}" do %>
+              <span class="material-symbols-outlined text-lg mr-2">visibility</span>
+              Ruby Overview
+            <% end %>
+            <%= link_to "/guides/ruby_controller", class: "flex items-center text-sm text-gray-700 hover:text-accent hover:bg-sky-50 px-3 py-2 rounded-lg transition-all #{request.path == '/guides/ruby_controller' ? 'bg-sky-100 text-accent font-medium' : ''}" do %>
+              <span class="material-symbols-outlined text-lg mr-2">settings</span>
+              Ruby Controller
+            <% end %>
+            <%= link_to "/guides/ruby_view", class: "flex items-center text-sm text-gray-700 hover:text-accent hover:bg-sky-50 px-3 py-2 rounded-lg transition-all #{request.path == '/guides/ruby_view' ? 'bg-sky-100 text-accent font-medium' : ''}" do %>
+              <span class="material-symbols-outlined text-lg mr-2">pageview</span>
+              Ruby View
+            <% end %>
+            <%= link_to "/guides/ruby_rich_view", class: "flex items-center text-sm text-gray-700 hover:text-accent hover:bg-sky-50 px-3 py-2 rounded-lg transition-all #{request.path == '/guides/ruby_rich_view' ? 'bg-sky-100 text-accent font-medium' : ''}" do %>
+              <span class="material-symbols-outlined text-lg mr-2">web</span>
+              Ruby Rich View
+            <% end %>
+            <%= link_to "/guides/ruby_model", class: "flex items-center text-sm text-gray-700 hover:text-accent hover:bg-sky-50 px-3 py-2 rounded-lg transition-all #{request.path == '/guides/ruby_model' ? 'bg-sky-100 text-accent font-medium' : ''}" do %>
+              <span class="material-symbols-outlined text-lg mr-2">database</span>
+              Ruby Model
+            <% end %>
+          </ul>
+        </div>
+
+        <%# Rails Doc Section %>
+        <div>
+          <h3 class="text-xs font-bold uppercase tracking-wider text-gray-500 mb-3 flex items-center">
+            <span class="material-symbols-outlined text-sm mr-1">description</span>
+            Rails Doc
+          </h3>
+          <ul class="space-y-2">
+            <%= link_to "/rails_doc/routing", class: "flex items-center text-sm text-gray-700 hover:text-accent hover:bg-sky-50 px-3 py-2 rounded-lg transition-all #{request.path == '/rails_doc/routing' ? 'bg-sky-100 text-accent font-medium' : ''}" do %>
+              <span class="material-symbols-outlined text-lg mr-2">route</span>
+              Routing
+            <% end %>
+            <%= link_to "/rails_doc/migration", class: "flex items-center text-sm text-gray-700 hover:text-accent hover:bg-sky-50 px-3 py-2 rounded-lg transition-all #{request.path == '/rails_doc/migration' ? 'bg-sky-100 text-accent font-medium' : ''}" do %>
+              <span class="material-symbols-outlined text-lg mr-2">upgrade</span>
+              Migration
+            <% end %>
+            <%= link_to "/rails_doc/active_record", class: "flex items-center text-sm text-gray-700 hover:text-accent hover:bg-sky-50 px-3 py-2 rounded-lg transition-all #{request.path == '/rails_doc/active_record' ? 'bg-sky-100 text-accent font-medium' : ''}" do %>
+              <span class="material-symbols-outlined text-lg mr-2">storage</span>
+              Active Record
+            <% end %>
+          </ul>
+        </div>
+
+        <%# MVC Section %>
+        <div>
+          <h3 class="text-xs font-bold uppercase tracking-wider text-gray-500 mb-3 flex items-center">
+            <span class="material-symbols-outlined text-sm mr-1">account_tree</span>
+            MVC
+          </h3>
+          <ul class="space-y-2">
+            <%= link_to "/mvc/index", class: "flex items-center text-sm text-gray-700 hover:text-accent hover:bg-sky-50 px-3 py-2 rounded-lg transition-all #{request.path == '/mvc/index' ? 'bg-sky-100 text-accent font-medium' : ''}" do %>
+              <span class="material-symbols-outlined text-lg mr-2">home</span>
+              MVC Index
+            <% end %>
+            <%= link_to "/mvc/controller", class: "flex items-center text-sm text-gray-700 hover:text-accent hover:bg-sky-50 px-3 py-2 rounded-lg transition-all #{request.path == '/mvc/controller' ? 'bg-sky-100 text-accent font-medium' : ''}" do %>
+              <span class="material-symbols-outlined text-lg mr-2">settings_applications</span>
+              MVC Controller
+            <% end %>
+            <%= link_to "/mvc/model", class: "flex items-center text-sm text-gray-700 hover:text-accent hover:bg-sky-50 px-3 py-2 rounded-lg transition-all #{request.path == '/mvc/model' ? 'bg-sky-100 text-accent font-medium' : ''}" do %>
+              <span class="material-symbols-outlined text-lg mr-2">table_chart</span>
+              MVC Model
+            <% end %>
+            <%= link_to "/mvc/view", class: "flex items-center text-sm text-gray-700 hover:text-accent hover:bg-sky-50 px-3 py-2 rounded-lg transition-all #{request.path == '/mvc/view' ? 'bg-sky-100 text-accent font-medium' : ''}" do %>
+              <span class="material-symbols-outlined text-lg mr-2">grid_view</span>
+              MVC View
+            <% end %>
+          </ul>
+        </div>
+      </nav>
+    </aside>
+
     <%# Flash Messages %>
     <% flash.each do |key, value| %>
       <div class="max-w-5xl mx-auto px-4 mt-4 animate-fade-in-up">
@@ -94,10 +190,96 @@
       </div>
     <% end %>
 
-    <%# Main Content %>
-    <main class="flex-grow w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-      <%= yield %>
-    </main>
+    <%# Main Content with Sidebar %>
+    <div class="flex-grow flex">
+      <%# Left Sidebar - Page Navigation %>
+      <aside id="desktop-sidebar" class="hidden lg:block w-64 bg-white/80 backdrop-blur-sm border-r border-sky-100 overflow-y-auto sticky top-16 h-[calc(100vh-4rem)] transition-all duration-300">
+        <nav class="p-6 space-y-6">
+          <%# Guides Section %>
+          <div>
+            <h3 class="text-xs font-bold uppercase tracking-wider text-gray-500 mb-3 flex items-center">
+              
+              Guides
+            </h3>
+            <ul class="space-y-2">
+              <%= link_to "/guides/ruby_overview", class: "flex items-center text-sm text-gray-700 hover:text-accent hover:bg-sky-50 px-3 py-2 rounded-lg transition-all #{request.path == '/guides/ruby_overview' ? 'bg-sky-100 text-accent font-medium' : ''}" do %>
+                
+                Ruby Overview
+              <% end %>
+              <%= link_to "/guides/ruby_controller", class: "flex items-center text-sm text-gray-700 hover:text-accent hover:bg-sky-50 px-3 py-2 rounded-lg transition-all #{request.path == '/guides/ruby_controller' ? 'bg-sky-100 text-accent font-medium' : ''}" do %>
+                
+                Ruby Controller
+              <% end %>
+              <%= link_to "/guides/ruby_view", class: "flex items-center text-sm text-gray-700 hover:text-accent hover:bg-sky-50 px-3 py-2 rounded-lg transition-all #{request.path == '/guides/ruby_view' ? 'bg-sky-100 text-accent font-medium' : ''}" do %>
+                
+                Ruby View
+              <% end %>
+              <%= link_to "/guides/ruby_rich_view", class: "flex items-center text-sm text-gray-700 hover:text-accent hover:bg-sky-50 px-3 py-2 rounded-lg transition-all #{request.path == '/guides/ruby_rich_view' ? 'bg-sky-100 text-accent font-medium' : ''}" do %>
+                
+                Ruby Rich View
+              <% end %>
+              <%= link_to "/guides/ruby_model", class: "flex items-center text-sm text-gray-700 hover:text-accent hover:bg-sky-50 px-3 py-2 rounded-lg transition-all #{request.path == '/guides/ruby_model' ? 'bg-sky-100 text-accent font-medium' : ''}" do %>
+                
+                Ruby Model
+              <% end %>
+            </ul>
+          </div>
+
+          <%# Rails Doc Section %>
+          <div>
+            <h3 class="text-xs font-bold uppercase tracking-wider text-gray-500 mb-3 flex items-center">
+              
+              Rails Doc
+            </h3>
+            <ul class="space-y-2">
+              <%= link_to "/rails_doc/routing", class: "flex items-center text-sm text-gray-700 hover:text-accent hover:bg-sky-50 px-3 py-2 rounded-lg transition-all #{request.path == '/rails_doc/routing' ? 'bg-sky-100 text-accent font-medium' : ''}" do %>
+                
+                Routing
+              <% end %>
+              <%= link_to "/rails_doc/migration", class: "flex items-center text-sm text-gray-700 hover:text-accent hover:bg-sky-50 px-3 py-2 rounded-lg transition-all #{request.path == '/rails_doc/migration' ? 'bg-sky-100 text-accent font-medium' : ''}" do %>
+                
+                Migration
+              <% end %>
+              <%= link_to "/rails_doc/active_record", class: "flex items-center text-sm text-gray-700 hover:text-accent hover:bg-sky-50 px-3 py-2 rounded-lg transition-all #{request.path == '/rails_doc/active_record' ? 'bg-sky-100 text-accent font-medium' : ''}" do %>
+                
+                Active Record
+              <% end %>
+            </ul>
+          </div>
+
+          <%# MVC Section %>
+          <div>
+            <h3 class="text-xs font-bold uppercase tracking-wider text-gray-500 mb-3 flex items-center">
+              
+              MVC
+            </h3>
+            <ul class="space-y-2">
+              <%= link_to "/mvc/index", class: "flex items-center text-sm text-gray-700 hover:text-accent hover:bg-sky-50 px-3 py-2 rounded-lg transition-all #{request.path == '/mvc/index' ? 'bg-sky-100 text-accent font-medium' : ''}" do %>
+                
+                MVC Index
+              <% end %>
+              <%= link_to "/mvc/controller", class: "flex items-center text-sm text-gray-700 hover:text-accent hover:bg-sky-50 px-3 py-2 rounded-lg transition-all #{request.path == '/mvc/controller' ? 'bg-sky-100 text-accent font-medium' : ''}" do %>
+                
+                MVC Controller
+              <% end %>
+              <%= link_to "/mvc/model", class: "flex items-center text-sm text-gray-700 hover:text-accent hover:bg-sky-50 px-3 py-2 rounded-lg transition-all #{request.path == '/mvc/model' ? 'bg-sky-100 text-accent font-medium' : ''}" do %>
+                
+                MVC Model
+              <% end %>
+              <%= link_to "/mvc/view", class: "flex items-center text-sm text-gray-700 hover:text-accent hover:bg-sky-50 px-3 py-2 rounded-lg transition-all #{request.path == '/mvc/view' ? 'bg-sky-100 text-accent font-medium' : ''}" do %>
+                
+                MVC View
+              <% end %>
+            </ul>
+          </div>
+        </nav>
+      </aside>
+
+      <%# Main Content Area %>
+      <main class="flex-grow w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+        <%= yield %>
+      </main>
+    </div>
 
     <%# Footer %>
     <footer class="bg-white mt-auto py-8 border-t border-sky-100">
@@ -108,6 +290,71 @@
         </p>
       </div>
     </footer>
+
+    <%# Sidebar Toggle Script %>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        // Mobile Sidebar Elements
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileSidebar = document.getElementById('mobile-sidebar');
+        const mobileOverlay = document.getElementById('mobile-sidebar-overlay');
+
+        // Desktop Sidebar Elements
+        const desktopToggleBtn = document.getElementById('desktop-sidebar-toggle');
+        const desktopSidebar = document.getElementById('desktop-sidebar');
+
+        // Mobile Sidebar Toggle
+        function toggleMobileSidebar() {
+          mobileSidebar.classList.toggle('-translate-x-full');
+          mobileOverlay.classList.toggle('hidden');
+        }
+
+        if (mobileMenuBtn) {
+          mobileMenuBtn.addEventListener('click', toggleMobileSidebar);
+        }
+
+        if (mobileOverlay) {
+          mobileOverlay.addEventListener('click', toggleMobileSidebar);
+        }
+
+        // Close mobile sidebar when a link is clicked
+        if (mobileSidebar) {
+          const sidebarLinks = mobileSidebar.querySelectorAll('a');
+          sidebarLinks.forEach(link => {
+            link.addEventListener('click', function() {
+              mobileSidebar.classList.add('-translate-x-full');
+              mobileOverlay.classList.add('hidden');
+            });
+          });
+        }
+
+        // Desktop Sidebar Toggle with localStorage
+        function toggleDesktopSidebar() {
+          if (desktopSidebar.classList.contains('lg:block')) {
+            // Hide sidebar
+            desktopSidebar.classList.remove('lg:block');
+            desktopSidebar.classList.add('lg:hidden');
+            localStorage.setItem('sidebarCollapsed', 'true');
+          } else {
+            // Show sidebar
+            desktopSidebar.classList.remove('lg:hidden');
+            desktopSidebar.classList.add('lg:block');
+            localStorage.setItem('sidebarCollapsed', 'false');
+          }
+        }
+
+        // Restore sidebar state from localStorage
+        const sidebarCollapsed = localStorage.getItem('sidebarCollapsed');
+        if (sidebarCollapsed === 'true' && desktopSidebar) {
+          desktopSidebar.classList.remove('lg:block');
+          desktopSidebar.classList.add('lg:hidden');
+        }
+
+        if (desktopToggleBtn) {
+          desktopToggleBtn.addEventListener('click', toggleDesktopSidebar);
+        }
+      });
+    </script>
 
   </body>
 </html>
