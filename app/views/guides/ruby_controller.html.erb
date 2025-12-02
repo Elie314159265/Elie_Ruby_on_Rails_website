@@ -1,0 +1,182 @@
+<%# ヒーローセクション - ページタイトル部分 %>
+<div class="text-center mb-12 animate-fade-in-up">
+  <h1 class="text-4xl font-bold text-gray-800 mb-4">
+    Controllerの基本を学ぼう(*‘ω‘ *)
+  </h1>
+  <p class="text-gray-600 text-lg">
+    Railsアプリの「司令塔」であるコントローラの役割を理解しよう！
+  </p>
+</div>
+
+<%# メインコンテンツ %>
+<div class="bg-white rounded-2xl p-8 shadow-lg mb-8">
+
+  <%# セクション1: 導入 %>
+  <h2 class="text-2xl font-bold text-gray-800 mb-4 border-b-2 border-sky-500 pb-2">
+    Controllerなしでは何も始まらない！
+  </h2>
+
+  <p class="text-gray-700 mb-6 leading-relaxed">
+    じつはRailsは、Controllerがないと何も動きません！<br>
+    Model（シェフ）もView（盛り付け役）も、Controller（店長）の指示がないと動けないのです。<br>
+    なので、まずはViewやModelよりも先にControllerをマスターしましょう(｀・ω・´)
+  </p>
+
+  <%# コマンド作成 %>
+  <div class="mb-8">
+    <h3 class="text-lg font-bold text-gray-800 mb-3">コントローラを作ってみよう！</h3>
+    <p class="text-gray-700 mb-3">
+      手動でファイルを作るより、コマンド一発で作るのがRails流です。<br>
+      今回は <code class="bg-gray-100 px-2 py-1 rounded text-red-500 font-bold">my</code> という名前のコントローラを作ってみましょう。
+    </p>
+
+    <div class="bg-gray-800 rounded-lg p-4 text-gray-200 text-sm font-mono mb-4 overflow-x-auto shadow-md">
+      <div class="flex">
+        <span class="text-green-400 mr-2">$</span>
+        <span>rails generate controller my</span>
+      </div>
+    </div>
+
+    <p class="text-gray-700 mb-3">
+      コマンドを叩くとファイルがドバーッと生成されますが、今一番大事なのはこれです！
+    </p>
+
+    <div class="bg-sky-50 border-l-4 border-sky-500 p-4 rounded mb-4">
+      <ul class="list-none space-y-2">
+        <li class="flex items-center">
+          <span class="text-2xl mr-2"></span>
+          <div>
+            <span class="font-bold text-gray-800">app/controllers/my_controller.rb</span>
+            <span class="text-sm text-gray-600 ml-2">… コントローラのプログラム本体</span>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <%# クラスの継承 %>
+  <div class="mb-6">
+    <h3 class="text-lg font-bold text-gray-800 mb-3">中身を見てみよう</h3>
+    <p class="text-gray-700 mb-3">
+      生成されたファイルの中身は、だいたいこんな感じです。
+    </p>
+
+    <div class="bg-gray-800 rounded-lg p-4 text-gray-200 text-sm font-mono mb-4 shadow-md">
+    
+<pre><code class="language-ruby">class MyController < ApplicationController
+end</code></pre>
+    </div>
+
+    <div class="bg-gray-50 rounded-lg p-5 border border-gray-200">
+      <h4 class="font-bold text-gray-800 mb-2">クラスの継承ってなに？(゜-゜)</h4>
+      <p class="text-gray-700 text-sm leading-relaxed">
+        <code>&lt; ApplicationController</code> という記号は、<strong>「継承（親子関係）」</strong>を表しています。<br>
+        例えるなら、<strong>「ApplicationController（親）」の遺伝子や能力をすべて受け継いで、「MyController（子）」が生まれた</strong>イメージです。<br>
+        このおかげで、難しい設定をゼロから書かなくても、Railsの便利な機能が最初から使えるのです！
+      </p>
+    </div>
+  </div>
+
+</div>
+
+<%# 実践セクション %>
+<div class="bg-white rounded-2xl p-8 shadow-lg mb-8">
+
+  <h2 class="text-2xl font-bold text-gray-800 mb-4 border-b-2 border-sky-500 pb-2">
+    簡単なページを作成してみよう(*‘ω‘ *)
+  </h2>
+
+  <p class="text-gray-700 mb-6 leading-relaxed">
+    実際に手を動かしながらやると、処理のイメージが湧きやすいです！<br>
+    さきほどの <code>my_controller.rb</code> を以下のコードに書き換えてみましょう。(コピペでOK)
+  </p>
+
+  <%# ステップ1: Controller %>
+  <div class="mb-8">
+    <div class="flex items-center mb-2">
+      <span class="bg-sky-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold mr-2">1</span>
+      <h3 class="font-bold text-gray-800">Controllerにアクションを追加</h3>
+    </div>
+    
+    <div class="bg-gray-800 rounded-lg p-4 text-gray-200 text-sm font-mono mb-2 shadow-md relative">
+      <div class="absolute top-2 right-2 text-xs text-gray-500">app/controllers/my_controller.rb</div>
+<pre><code class="language-ruby">class MyController < ApplicationController
+  # page1という名前のアクション(仕事)を定義
+  def page1
+    # 本来はViewファイルを作りますが、今回は手軽に実験するため
+    # コントローラから直接HTMLを返してみます！
+    render html: "<h1>初めてのページ！</h1><p>コントローラから直接返しています(｀・ω・´)</p>".html_safe
+  end
+end</code></pre>
+    </div>
+    <p class="text-sm text-gray-500 text-right">※ <code>render html: ...</code> は「Viewを使わず直接画面を表示する」という命令です。</p>
+  </div>
+
+  <%# ステップ2: Routes %>
+  <div class="mb-8">
+    <div class="flex items-center mb-2">
+      <span class="bg-sky-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold mr-2">2</span>
+      <h3 class="font-bold text-gray-800">「ルート（道案内）」を作成</h3>
+    </div>
+
+    <p class="text-gray-700 mb-3">
+      コントローラを作っただけでは、ブラウザはどこにアクセスすればいいか分かりません。<br>
+      <strong>「受付窓口（config/routes.rb）」</strong>に、「このURLに来たら、このコントローラを呼んでね」と登録する必要があります。
+    </p>
+
+    <div class="bg-yellow-50 border-l-4 border-yellow-400 p-3 mb-3 text-sm text-yellow-800">
+      ⚠️ ファイル名は <code>route.rb</code> ではなく <strong><code>routes.rb</code></strong> (複数形) です！注意！
+    </div>
+
+    <div class="bg-gray-800 rounded-lg p-4 text-gray-200 text-sm font-mono mb-4 shadow-md relative">
+      <div class="absolute top-2 right-2 text-xs text-gray-500">config/routes.rb</div>
+<pre><code class="language-ruby">Rails.application.routes.draw do
+  # 「/my/page1」にアクセスが来たら、「myコントローラ」の「page1アクション」を動かす
+  get 'my/page1'
+  
+  # ↓これは「トップページに来たら /my/page1 に転送する」という設定です
+  root to: redirect('/my/page1')
+end</code></pre>
+    </div>
+  </div>
+
+  <%# ステップ3: 確認 %>
+  <div class="mb-4">
+    <div class="flex items-center mb-2">
+      <span class="bg-sky-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold mr-2">3</span>
+      <h3 class="font-bold text-gray-800">ブラウザで確認！</h3>
+    </div>
+
+    <p class="text-gray-700 mb-3">
+      準備完了です！サーバーを起動してアクセスしてみましょう。
+    </p>
+
+    <div class="bg-gray-800 rounded-lg p-4 text-gray-200 text-sm font-mono mb-4 inline-block">
+      <span class="text-green-400">$</span> rails server
+    </div>
+
+    <p class="text-gray-700 leading-relaxed">
+      起動したら、以下のURLにアクセスしてみてください。<br>
+      <code class="bg-gray-100 px-2 py-1 rounded text-sky-600 font-bold">'http://localhost<span>:</span>3000/my/page1'</code>
+    </p>
+    
+    <div class="mt-4 p-4 border-2 border-dashed border-gray-300 rounded-lg text-center bg-gray-50">
+      <p class="text-gray-500 text-sm mb-2">ブラウザにこんな感じで表示されれば大成功です！(*^^*)</p>
+      <div class="bg-white border border-gray-200 p-4 rounded shadow-sm inline-block text-left">
+        <%= image_tag 'controller_1.png', class: 'ControllerPicture' %>
+      </div>
+    </div>
+  </div>
+  <p class="text-gray-700 leading-relaxed">
+  <br>
+      <hr>
+      <br>
+      次の記事では実際にViewを使ってもっとおしゃれにページを作ってみましょう(*‘ω‘ *)
+  </p>
+</div>
+
+<%# ナビゲーション - 前後の記事へのリンク %>
+<div class="flex justify-between mt-8">
+  <%= link_to "← 前のページ: MVCとは？", "/guides/ruby_overview", class: "text-sky-600 hover:text-sky-700 font-medium" %>
+  <%= link_to "次の記事: Viewを作ろう →", "/guides/ruby_view", class: "text-sky-600 hover:text-sky-700 font-medium" %>
+</div>

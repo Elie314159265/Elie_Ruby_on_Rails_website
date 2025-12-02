@@ -1,5 +1,10 @@
 Rails.application.routes.draw do
+  get "pages/index"
   get "guides/ruby_overview"
+  get "guides/ruby_controller"
+  get "guides/ruby_view"
+  get "guides/ruby_model"
+
 
   root to: redirect('/pages/index')
   # get 'pages/index', to: 'pages#index'
@@ -11,7 +16,9 @@ Rails.application.routes.draw do
   get "mvc/controller"
   get "mvc/model"
   get "mvc/view"
-  get "pages/index"
+  
+
+  get 'my/page1'
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.

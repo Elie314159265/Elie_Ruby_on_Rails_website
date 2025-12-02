@@ -1,0 +1,218 @@
+<%# ヒーローセクション %>
+<div class="text-center mb-12 animate-fade-in-up">
+  <h1 class="text-4xl font-bold text-gray-800 mb-4">
+    Viewの基本を学ぼう(^^ゞ
+  </h1>
+  <p class="text-gray-600 text-lg">
+    Controller（店長）の負担を減らし、View（盛り付け係）に任せよう！
+  </p>
+</div>
+
+<%# メインコンテンツ %>
+<div class="bg-white rounded-2xl p-8 shadow-lg mb-8">
+
+  <%# 導入セクション %>
+  <h2 class="text-2xl font-bold text-gray-800 mb-4 border-b-2 border-sky-500 pb-2">
+    Controllerだけでは限界がある...？
+  </h2>
+
+  <p class="text-gray-700 mb-6 leading-relaxed">
+    前回はControllerの中に直接HTMLを書きましたが、あれは例えるなら...<br>
+    <strong>「店長（Controller）が、お客さんに料理の説明を口頭で早口でまくし立てている」</strong>ような状態です。<br>
+    <br>
+    短いメッセージならいいですが、複雑なページ（豪華なフルコース）をすべてControllerに書くのは無理がありますよね。<br>
+    そこで、<strong>「盛り付けのプロ（View）」</strong>の出番です！∠(｀・ω・´)
+  </p>
+
+  <%# 手順1: ファイル作成 %>
+  <div class="mb-8">
+    <div class="flex items-center mb-2">
+      <span class="bg-sky-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold mr-2">1</span>
+      <h3 class="font-bold text-gray-800">Viewファイルを用意しよう</h3>
+    </div>
+
+    <p class="text-gray-700 mb-3">
+      実は <code class="bg-gray-100 px-2 py-1 rounded">$ rails generate controller my</code> を実行したとき、<br>
+      Railsは気を利かせて「View用のフォルダ」も作ってくれていました。
+    </p>
+
+    <div class="bg-gray-100 p-3 rounded mb-4 font-mono text-sm text-gray-600">
+      app/views/my/ <span class="text-gray-400">← ここにファイルを作ります</span>
+    </div>
+
+    <p class="text-gray-700 mb-2">
+      以下のコマンドで、空のファイルを作成しましょう。
+    </p>
+    <div class="bg-gray-800 rounded-lg p-4 text-gray-200 text-sm font-mono mb-4 shadow-md">
+      <div class="flex">
+        <span class="text-green-400 mr-2">$</span>
+        <span>touch app/views/my/page1.html.erb</span>
+      </div>
+    </div>
+  </div>
+
+  <%# 手順2: HTML編集 %>
+  <div class="mb-8">
+    <div class="flex items-center mb-2">
+      <span class="bg-sky-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold mr-2">2</span>
+      <h3 class="font-bold text-gray-800">HTMLを書いてみよう</h3>
+    </div>
+
+    <p class="text-gray-700 mb-3">
+      作成した <code class="font-bold">page1.html.erb</code> に、以下の内容をコピペしてください。<br>
+      これが「お皿の上の盛り付け」になります！
+    </p>
+
+    <div class="bg-gray-800 rounded-lg p-4 text-gray-200 text-sm font-mono mb-2 shadow-md relative">
+      <div class="absolute top-2 right-2 text-xs text-gray-500">app/views/my/page1.html.erb</div>
+<pre><code class="language-html">&lt;h1&gt;Viewを使ったページへようこそ！&lt;/h1&gt;
+
+&lt;p&gt;
+  これはControllerではなく、&lt;br&gt;
+  Viewファイル（page1.html.erb）に書かれた内容です。
+&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;HTMLがスッキリ書ける！&lt;/li&gt;
+  &lt;li&gt;デザインが変更しやすい！&lt;/li&gt;
+  &lt;li&gt;店長（Controller）もニッコリ！&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+    </div>
+  </div>
+
+  <%# 手順3: Controller修正 %>
+  <div class="mb-8">
+    <div class="flex items-center mb-2">
+      <span class="bg-sky-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold mr-2">3</span>
+      <h3 class="font-bold text-gray-800">Controllerをスッキリさせよう</h3>
+    </div>
+
+    <p class="text-gray-700 mb-3">
+      Viewファイルを作ったので、店長（Controller）はもう喋らなくてOKです。<br>
+      <code>app/controllers/my_controller.rb</code> を以下のように書き換えてください。
+    </p>
+
+    <div class="bg-gray-800 rounded-lg p-4 text-gray-200 text-sm font-mono mb-4 shadow-md relative">
+      <div class="absolute top-2 right-2 text-xs text-gray-500">app/controllers/my_controller.rb</div>
+<pre><code class="language-ruby">class MyController < ApplicationController
+  def page1
+    # 何も書かないでOK！
+  end
+end</code></pre>
+    </div>
+
+    <%# Tech Leadの解説: 暗黙のレンダリング %>
+    <div class="bg-sky-50 border-l-4 border-sky-500 p-4 rounded shadow-sm">
+      <h4 class="font-bold text-sky-800 mb-2">Elieの疑問：なぜ空っぽで動くの？</h4>
+      <p class="text-sm text-sky-900 leading-relaxed">
+        「えっ、指示しなくていいの？」と思いましたか？<br>
+        実はRailsには<strong>「言わなくてもわかるよ（暗黙の了解）」</strong>という賢いルールがあるのです。<br>
+        <br>
+        アクション名が <code>page1</code> なら、Railsは自動的に<br>
+        <strong>「app/views/コントローラ名/page1.html.erb」</strong><br>
+        を探して表示してくれます。これを<strong>「設定より規約（Convention over Configuration）」</strong>と呼びます。<br>
+        余計なコードを書かなくていい、Railsの最高の機能の一つです！（ ﾟ∀ﾟ ）
+      </p>
+    </div>
+  </div>
+
+  <%# 手順4: 確認 %>
+  <div class="mb-6">
+    <div class="flex items-center mb-2">
+      <span class="bg-sky-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold mr-2">4</span>
+      <h3 class="font-bold text-gray-800">ブラウザで確認！</h3>
+    </div>
+
+    <p class="text-gray-700 mb-3">
+      サーバーを起動してアクセスしてみましょう。
+    </p>
+
+    <div class="bg-gray-800 rounded-lg p-4 text-gray-200 text-sm font-mono mb-3 inline-block">
+      <span class="text-green-400">$</span> rails server
+    </div>
+
+    <p class="text-gray-700">
+      URL: <code class="bg-gray-100 px-2 py-1 rounded text-sky-600 font-bold">'http://localhost<span>:</span>3000/my/page1'</code>
+    </p>
+    <p class="text-gray-600 text-sm mt-2">
+      さきほどのHTMLが表示されていれば成功です！(^ ^)v
+    </p>
+    <div class="mt-4 p-4 border-2 border-dashed border-gray-300 rounded-lg text-center bg-gray-50">
+      <p class="text-gray-500 text-sm mb-2">ブラウザにこんな感じで表示されれば大成功です！(*^^*)</p>
+      <div class="bg-white border border-gray-200 p-4 rounded shadow-sm inline-block text-left">
+        <%= image_tag 'view_1.png', class: 'ControllerPicture' %>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<%# まとめフロー図 %>
+<div class="bg-white rounded-2xl p-8 shadow-lg mb-8">
+  <h2 class="text-2xl font-bold text-gray-800 mb-4 border-b-2 border-sky-500 pb-2">
+    今回の流れをおさらいしよう( ･ิω･ิ)
+  </h2>
+
+  <div class="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-4 mb-6">
+    <%# User %>
+    <div class="text-center p-4 bg-blue-50 rounded-lg border border-blue-200 w-full md:w-auto">
+      <div class="text-2xl mb-2"></div>
+      <div class="font-bold text-blue-800">User</div>
+      <div class="text-xs text-blue-600">URLにアクセス</div>
+    </div>
+
+    <div class="text-gray-400 font-bold">→</div>
+
+    <%# Controller %>
+    <div class="text-center p-4 bg-blue-50 rounded-lg border border-blue-200 w-full md:w-auto">
+      <div class="text-2xl mb-2"></div>
+      <div class="font-bold text-blue-800">Controller</div>
+      <div class="text-xs text-blue-600">Action実行</div>
+    </div>
+
+    <div class="text-gray-400 font-bold">→</div>
+
+    <%# View %>
+    <div class="text-center p-4 bg-blue-50 rounded-lg border border-blue-200 w-full md:w-auto">
+      <div class="text-2xl mb-2"></div>
+      <div class="font-bold text-blue-800">View</div>
+      <div class="text-xs text-blue-600">HTML作成</div>
+    </div>
+
+    <div class="text-blue-400 font-bold">→</div>
+
+    <%# Browser %>
+    <div class="text-center p-4 bg-blue-50 rounded-lg border border-blue-200 w-full md:w-auto">
+      <div class="text-2xl mb-2"></div>
+      <div class="font-bold text-blue-800">Browser</div>
+      <div class="text-xs text-blue-600">画面表示</div>
+    </div>
+  </div>
+
+  <p class="text-gray-700 leading-relaxed text-center">
+    これで「リクエストを受けて画面を表示する」という基本サイクルが完成しました。<br>
+    今回はシンプルな文字だけでしたが、Viewを使えばもっと色々なことができます！
+  </p>
+
+</div>
+
+<%# 次回の予告 %>
+<div class="bg-white rounded-2xl p-8 shadow-lg mb-8">
+  <h2 class="text-2xl font-bold mb-4">
+    Next Step: もっとリッチなWebページに！(^_-)
+  </h2>
+  <p class="mb-4 text-bold-100">
+    次回は、以下のトピックについて学んでいきましょう！
+  </p>
+  <ul class="list-disc list-inside space-y-2 text-bold-100 font-medium">
+    <li>クライアントから値を渡す<strong>「クエリパラメータ」</strong></li>
+    <li>アプリのデザインを整える<strong>「スタイルシート(CSS)」</strong></li>
+    <li>プロ並みのデザインを一瞬で作る魔法のツール<strong>「Bootstrap」</strong></li>
+  </ul>
+</div>
+
+<%# ナビゲーション %>
+<div class="flex justify-between mt-8">
+  <%= link_to "← 前の記事：Controllerの基本", "/guides/ruby_controller", class: "text-sky-600 hover:text-sky-700 font-medium" %>
+  <%= link_to "次の記事: もっとリッチなWebページに！ →", "/guides/ruby_rich_view", class: "text-sky-600 hover:text-sky-700 font-medium" %>
+</div>
