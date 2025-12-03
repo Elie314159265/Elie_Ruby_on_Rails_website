@@ -1,0 +1,260 @@
+<%# ヒーローセクション %>
+<div class="text-center mb-12 animate-fade-in-up">
+  <h1 class="text-4xl font-bold text-gray-800 mb-4">
+    ユーザーを導く機能！(ﾟ∀ﾟ)
+  </h1>
+  <p class="text-gray-600 text-lg">
+    処理が終わった後の「リダイレクト」と、安全・便利な「ヘルパー関数」を学ぼう！
+  </p>
+</div>
+
+<%# メインコンテンツ %>
+<div class="bg-white rounded-2xl p-8 shadow-lg mb-8">
+
+  <%# 1. リダイレクト %>
+  <h2 class="text-2xl font-bold text-gray-800 mb-4 border-b-2 border-sky-500 pb-2">
+    1. 処理が終わったらご案内！ (redirect_to)
+  </h2>
+
+  <p class="text-gray-700 mb-4 leading-relaxed">
+    Webアプリでは、データの保存や更新などの処理が終わった後、そのままの画面に留まることはあまりありません。<br>
+    「保存しました！じゃあ一覧画面に戻りますねー」と、自動でページを切り替えるのが一般的ですね。みなさんもよく体験したことがあるかと思います(゜_゜)<br>
+    これを<strong>「リダイレクト (redirect_to)」</strong>と呼びます。
+  </p>
+
+  <%# リダイレクトの例え %>
+  <div class="bg-blue-50 border-l-4 border-blue-400 p-4 rounded mb-6">
+    <h3 class="font-bold text-gray-800 mb-2">リダイレクトって？</h3>
+    <p class="text-sm text-gray-900">
+      例えるなら<strong>「市役所の手続き完了後の誘導」</strong>です！(｀・ω・´)<br>
+      「転入届の提出（処理）」が終わったら、職員さん（Controller）が「はい、手続き完了です。次はあちらの待合室（別ページ）へどうぞー」と自動的に案内してくれるイメージです。<br>
+      これがないと、お客さんは「えっ、終わったの？次どこ行けばいいの？(´；ω；｀)」と迷子になってしまいます。
+    </p>
+  </div>
+
+  <div class="bg-gray-800 rounded-lg p-4 text-gray-200 text-sm font-mono mb-6 shadow-md relative">
+    <div class="absolute top-2 right-2 text-xs text-gray-500">app/controllers/sample_controller.rb</div>
+<pre><code class="language-ruby"># リダイレクトの処理の例
+def create
+  # (ここでデータを保存する処理...)
+  
+  # 処理が終わったら、一覧ページ("/posts/index")へ飛ばす！
+  redirect_to "/posts/index"
+end</code></pre>
+４の実践演習で実際にリダイレクトを実装してみましょう(o・ω・o)
+  </div>
+
+  <%# 2. フラッシュメッセージ %>
+  <h2 class="text-2xl font-bold text-gray-800 mb-4 border-b-2 border-sky-500 pb-2 mt-12">
+    2. 一瞬だけ表示するメッセージ (Flash)
+  </h2>
+
+  <p class="text-gray-700 mb-4 leading-relaxed">
+    リダイレクトした直後、「保存しました！」とか「削除しました」って画面の上に一瞬だけ出ますよね？<br>
+    あれをRailsでは<strong>「フラッシュメッセージ (flash)」</strong>と呼びます。
+  </p>
+
+  <%# Flashの例え %>
+  <div class="bg-blue-50 border-l-4 border-blue-400 p-4 rounded mb-6">
+    <h3 class="font-bold text-gray-800 mb-2">フラッシュメッセージって？</h3>
+    <p class="text-sm text-gray-900">
+      例えるなら<strong>「すれ違いざまの伝言」</strong>です！( ﾟдﾟ)ﾊｯ!<br>
+      ページを移動するその一瞬だけ、「上手くいきましたよ！」と書かれたメモを渡すようなものです。<br>
+      次のページを表示したら（またはリロードしたら）、そのメモはシュレッダーにかけられて消えてしまいます。儚いですね...。
+    </p>
+  </div>
+
+  <div class="mb-6">
+    <h3 class="font-bold text-gray-800 mb-2">使い方は簡単！</h3>
+    <p class="text-gray-700 mb-2">
+      Controllerで <code>flash[:notice]</code> という特別な箱にメッセージを入れるだけです。
+    </p>
+    <div class="bg-gray-800 rounded-lg p-4 text-gray-200 text-sm font-mono mb-4 shadow-md">
+<pre><code class="language-ruby">def create
+  # 保存処理...
+  
+  # フラッシュメッセージをセット
+  flash[:notice] = "記事を保存しました！(ﾟ∀ﾟ)"
+  
+  redirect_to "/posts/index"
+end</code></pre>
+    </div>
+    
+    <p class="text-gray-700 mb-2">
+      表示する仕掛けは、実はもう <code>application.html.erb</code> に書いてあります！<br>
+      （すべてのページで共通して表示したいから、レイアウトファイルに書くのが定石なのです）
+    </p>
+    
+    <div class="bg-gray-100 p-3 rounded text-sm text-gray-600 font-mono">
+      &lt;% flash.each do |key, value| %&gt;<br>
+      &nbsp;&nbsp;&lt;!-- ここでメッセージを表示 --&gt;<br>
+      &lt;% end %&gt;
+    </div>
+  </div>
+
+</div>
+
+<%# ヘルパー関数セクション %>
+<div class="bg-white rounded-2xl p-8 shadow-lg mb-8">
+
+  <h2 class="text-2xl font-bold text-gray-800 mb-4 border-b-2 border-sky-500 pb-2">
+    3. HTMLを書くより便利！ヘルパー関数
+  </h2>
+
+  <p class="text-gray-700 mb-4 leading-relaxed">
+    Railsには、HTMLタグをRubyのコードで簡単に書ける<strong>「ヘルパー関数」</strong>がたくさん用意されています。<br>
+    特に <code>link_to</code>（リンク）と <code>image_tag</code>（画像）は超頻出です！
+  </p>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+    <%# link_to %>
+    <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+      <h3 class="font-bold text-sky-600 mb-2">リンクを作る (link_to)</h3>
+      <p class="text-xs text-gray-500 mb-2">HTML (面倒くさい...)</p>
+      <code class="block bg-gray-200 p-2 rounded text-xs mb-3">&lt;a href="/users/1"&gt;マイページ&lt;/a&gt;</code>
+      
+      <p class="text-xs text-sky-600 mb-2 font-bold">Rails (スッキリ！)</p>
+      <code class="block bg-white border border-sky-200 p-2 rounded text-xs text-sky-700">
+        <span class="text-red-500">&lt;%=</span> link_to "マイページ", "/users/1" <span class="text-red-500">%&gt;</span>
+      </code>
+    </div>
+
+    <%# image_tag %>
+    <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+      <h3 class="font-bold text-sky-600 mb-2">画像を表示 (image_tag)</h3>
+      <p class="text-xs text-gray-500 mb-2">HTML (パス間違えそう...)</p>
+      <code class="block bg-gray-200 p-2 rounded text-xs mb-3">&lt;img src="/assets/cat.png" /&gt;</code>
+      
+      <p class="text-xs text-sky-600 mb-2 font-bold">Rails (ファイル名だけでOK！)</p>
+      <code class="block bg-white border border-sky-200 p-2 rounded text-xs text-sky-700">
+        <span class="text-red-500">&lt;%=</span> image_tag "cat.png" <span class="text-red-500">%&gt;</span>
+      </code>
+    </div>
+  </div>
+
+  <%# セキュリティ対策 %>
+  <div class="bg-blue-50 border-l-4 border-blue-400 p-4 rounded mb-6">
+    <h3 class="font-bold text-gray-800 mb-2">
+      <span class="material-symbols-outlined align-middle mr-1"></span>
+      なんでわざわざヘルパーを使うの？
+    </h3>
+    <p class="text-sm text-gray-800 leading-relaxed mb-2">
+      「HTML直接書いたほうが早くない？」と思うかもしれません。<br>
+      でも、ヘルパーを使う最大の理由は<strong>「セキュリティ対策」</strong>です！(｀・ω・´)
+    </p>
+    <p class="text-sm text-gray-800 leading-relaxed">
+      もし悪い人が、掲示板の名前に <code>&lt;script&gt;alert('ウイルスだぞ！')&lt;/script&gt;</code> なんて登録したとします。<br>
+      HTMLでそのまま表示すると、そのスクリプトが実行されてしまいます（危険！）。<br>
+      <br>
+      しかし！Railsのヘルパーは、<strong>自動的に危険な文字を「ただの文字」に無害化（エスケープ）</strong>してくれます。<br>
+      例えるなら<strong>「食材（データ）を調理する前に、必ず消毒・殺菌してくれるフィルター」</strong>が通るようなものです。<br>
+      だからRailsを使うだけで、自然と安全なサイトが作れるんですねー(*‘ω‘ *)ﾅﾙﾎﾄﾞ
+    </p>
+  </div>
+
+</div>
+
+<%# 実践演習セクション %>
+<div class="bg-white rounded-2xl p-8 shadow-lg mb-8">
+
+  <h2 class="text-2xl font-bold text-gray-800 mb-4 border-b-2 border-sky-500 pb-2">
+    4. 実践演習：トップへ戻る処理を作ろう！(｀・ω・´)
+  </h2>
+
+  <p class="text-gray-700 mb-6 leading-relaxed">
+    これまでの知識（Controller, Routes, Redirect, Helper, Flash）を総動員して、<br>
+    <strong>「ボタンを押したらトップページへ戻る」</strong>という機能を実装してみましょう！
+  </p>
+
+  <div class="space-y-8">
+    <%# ステップ1: Controller %>
+    <div>
+      <h3 class="flex items-center font-bold text-gray-800 mb-2">
+        <span class="bg-sky-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm mr-2">1</span>
+        Controllerに「案内係」を追加
+      </h3>
+      <p class="text-sm text-gray-600 mb-2">
+        <code>app/controllers/my_controller.rb</code> に、トップページ(<code>"/"</code>)へリダイレクトするアクションを追加します。
+      </p>
+      <div class="bg-gray-800 rounded-lg p-4 text-gray-200 text-sm font-mono shadow-md relative">
+        <div class="absolute top-2 right-2 text-xs text-gray-500">my_controller.rb</div>
+<pre><code class="language-ruby">class MyController < ApplicationController
+  def page1
+    # ... (既存のコード)
+  end
+
+  # ↓これを追加！
+  def go_root
+    # notice発砲
+    flash[:notice] = "リダイレクト実行！((((((((っ･ω･)っ ﾌﾞｰﾝ"
+    # 「トップページへ移動せよ！」という命令
+    redirect_to "/"
+  end
+end</code></pre>
+      </div>
+    </div>
+
+    <%# ステップ2: Routes %>
+    <div>
+      <h3 class="flex items-center font-bold text-gray-800 mb-2">
+        <span class="bg-sky-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm mr-2">2</span>
+        Routesに「窓口」を追加
+      </h3>
+      <p class="text-sm text-gray-600 mb-2">
+        <code>config/routes.rb</code> に、新しいアクションへの道を作ります。
+      </p>
+      <div class="bg-gray-800 rounded-lg p-4 text-gray-200 text-sm font-mono shadow-md relative">
+        <div class="absolute top-2 right-2 text-xs text-gray-500">config/routes.rb</div>
+<pre><code class="language-ruby">Rails.application.routes.draw do
+  # ... (既存のコード)
+  
+  # ↓これを追加！
+  get "my/go_root"
+end</code></pre>
+      </div>
+    </div>
+
+    <%# ステップ3: 確認 %>
+    <div>
+      <h3 class="flex items-center font-bold text-gray-800 mb-2">
+        <span class="bg-sky-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm mr-2">3</span>
+        動作確認！
+      </h3>
+      <p class="text-sm text-gray-600 mb-2">
+        サーバーを起動して、ブラウザで <code class="bg-gray-100 px-1 rounded">/my/go_root</code> にアクセスしてみましょう。<br>
+        一瞬でトップページに戻されれば成功です！(ﾟ∀ﾟ)
+      </p>
+    </div>
+
+    <%# ステップ4: 応用 (ボタン化) %>
+    <div class="bg-sky-50 p-4 rounded-lg border border-sky-100">
+      <h3 class="flex items-center font-bold text-sky-800 mb-2">
+        <span class="bg-sky-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm mr-2">Ex</span>
+        [応用] ボタンを作ってみよう！
+      </h3>
+      <p class="text-sm text-gray-700 mb-3">
+        前回の「Bootstrap」と今回の「link_to」を組み合わせれば、おしゃれなボタンが作れます。<br>
+        <code>app/views/my/page1.html.erb</code> などに以下のコードを貼ってみてください。
+      </p>
+      
+      <div class="bg-white border border-sky-200 rounded p-3 mb-3">
+        <code class="text-xs text-purple-600 block mb-1">&lt;%# classにBootstrapの装飾を指定しています %&gt;</code>
+        <code class="text-sm text-gray-800">
+          <span class="text-red-500">&lt;%=</span> link_to "トップに戻る", "/my/go_root", class: "btn btn-primary" <span class="text-red-500">%&gt;</span>
+        </code>
+      </div>
+
+      <p class="text-xs text-gray-600">
+        ※ <code>/my/go_root</code> にアクセスすると、コントローラの <code>redirect_to "/"</code> が発動してトップに戻る仕組みです。
+      </p>
+    </div>
+
+  </div>
+
+</div>
+
+<%# ナビゲーション %>
+<div class="flex justify-between mt-8">
+  <%= link_to "← 前の記事：リッチなView", "/guides/ruby_rich_view", class: "text-sky-600 hover:text-sky-700 font-medium" %>
+  <%= link_to "次の記事：DBとModel →", "/guides/ruby_model", class: "text-sky-600 hover:text-sky-700 font-medium" %>
+</div>

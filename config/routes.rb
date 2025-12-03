@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   get "guides/ruby_controller"
   get "guides/ruby_view"
   get "guides/ruby_rich_view"
+  get "guides/ruby_redirect_helper"
   get "guides/ruby_model"
 
 
