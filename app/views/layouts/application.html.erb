@@ -122,6 +122,10 @@
               <span class="material-symbols-outlined text-lg mr-2">web</span>
               Ruby Rich View
             <% end %>
+            <%= link_to "/guides/ruby_redirect_helper", class: "flex items-center text-sm text-gray-700 hover:text-accent hover:bg-sky-50 px-3 py-2 rounded-lg transition-all #{request.path == '/guides/ruby_redirect_helper' ? 'bg-sky-100 text-accent font-medium' : ''}" do %>
+              <span class="material-symbols-outlined text-lg mr-2"></span>
+              Ruby Redirect&Helper
+            <% end %>
             <%= link_to "/guides/ruby_model", class: "flex items-center text-sm text-gray-700 hover:text-accent hover:bg-sky-50 px-3 py-2 rounded-lg transition-all #{request.path == '/guides/ruby_model' ? 'bg-sky-100 text-accent font-medium' : ''}" do %>
               <span class="material-symbols-outlined text-lg mr-2">database</span>
               Ruby Model
@@ -218,6 +222,11 @@
                 
                 Ruby Rich View
               <% end %>
+              <%= link_to "/guides/ruby_redirect_helper", class: "flex items-center text-sm text-gray-700 hover:text-accent hover:bg-sky-50 px-3 py-2 rounded-lg transition-all #{request.path == '/guides/ruby_redirect_helper' ? 'bg-sky-100 text-accent font-medium' : ''}" do %>
+            
+                Ruby Redirect&Helper
+              <% end %>
+
               <%= link_to "/guides/ruby_model", class: "flex items-center text-sm text-gray-700 hover:text-accent hover:bg-sky-50 px-3 py-2 rounded-lg transition-all #{request.path == '/guides/ruby_model' ? 'bg-sky-100 text-accent font-medium' : ''}" do %>
                 
                 Ruby Model
