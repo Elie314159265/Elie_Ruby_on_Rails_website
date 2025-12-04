@@ -60,25 +60,25 @@ output "route53_name_servers" {
 # ✅ 新規: 既存ドメイン移行時の手順出力
 output "domain_migration_instructions" {
   description = "Instructions for migrating existing domain to Route 53"
-  value = var.use_existing_domain && var.domain_name != "" ? <<-EOT
-    
+  value = var.use_existing_domain && var.domain_name != "" ? (<<-EOT
+
     ========================================
     既存ドメインのネームサーバー変更手順
     ========================================
-    
+
     現在のドメインレジストラ（お名前.com、ムームードメイン等）で、
     以下のRoute 53ネームサーバーに変更してください:
-    
+
     ${join("\n    ", var.domain_name != "" ? aws_route53_zone.main[0].name_servers : [])}
-    
+
     変更後、DNS伝播に最大48時間かかる場合があります（通常は数時間）。
-    
+
     確認コマンド:
     dig ${var.domain_name} NS +short
-    
+
     ========================================
   EOT
-  : "N/A (not using existing domain)"
+  ) : "N/A (not using existing domain)"
 }
 
 # ========================================
