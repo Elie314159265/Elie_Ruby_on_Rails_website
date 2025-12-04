@@ -21,6 +21,15 @@ apt-get install -y \
     lsb-release \
     git
 
+echo "=== Installing AWS CLI v2 ==="
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+apt-get install -y unzip
+unzip awscliv2.zip
+sudo ./aws/install
+rm -rf aws awscliv2.zip
+echo "AWS CLI version: $(aws --version)"
+
+
 # Docker インストール
 echo "=== Installing Docker ==="
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
