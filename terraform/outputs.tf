@@ -49,12 +49,18 @@ output "target_group_arn" {
 
 output "route53_zone_id" {
   description = "Route 53 Hosted Zone ID"
-  value       = var.domain_name != "" ? aws_route53_zone.main[0].zone_id : "N/A (no domain configured)"
+  value       = var.domain_name != "" ? local.zone_id : "N/A (no domain configured)"
 }
 
 output "route53_name_servers" {
   description = "Route 53 Name Servers (use these if migrating existing domain)"
-  value       = var.domain_name != "" ? aws_route53_zone.main[0].name_servers : []
+  value = var.domain_name != "" ? (
+    var.use_existing_domain ? (
+      length(data.aws_route53_zone.existing) > 0 ? data.aws_route53_zone.existing[0].name_servers : []
+    ) : (
+      length(aws_route53_zone.main) > 0 ? aws_route53_zone.main[0].name_servers : []
+    )
+  ) : []
 }
 
 # ✅ 新規: 既存ドメイン移行時の手順出力
@@ -69,7 +75,7 @@ output "domain_migration_instructions" {
     現在のドメインレジストラ（お名前.com、ムームードメイン等）で、
     以下のRoute 53ネームサーバーに変更してください:
 
-    ${join("\n    ", var.domain_name != "" ? aws_route53_zone.main[0].name_servers : [])}
+    ${join("\n    ", length(data.aws_route53_zone.existing) > 0 ? data.aws_route53_zone.existing[0].name_servers : [])}
 
     変更後、DNS伝播に最大48時間かかる場合があります（通常は数時間）。
 
