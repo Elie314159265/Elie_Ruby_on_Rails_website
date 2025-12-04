@@ -1,6 +1,7 @@
 #!/bin/bash
 set -e
 
+
 # ログ設定
 exec > >(tee /var/log/user-data.log)
 exec 2>&1
