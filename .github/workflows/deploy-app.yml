@@ -118,7 +118,7 @@ jobs:
               'docker run -d --name rails-app --restart unless-stopped -p 3000:3000 -e RAILS_ENV=production -e RAILS_MASTER_KEY=${{ secrets.RAILS_MASTER_KEY }} rails-portfolio:latest',
               'sleep 5',
               'echo \"Running health check...\"',
-              'curl -f http://localhost:3000/up || exit 1',
+              'curl -s -o /dev/null -w "%{http_code}" http://localhost:3000/up | grep -q "200"',
               'echo \"Cleaning up...\"',
               'rm -f rails-portfolio.tar.gz',
               'docker image prune -f --filter \"until=24h\"',
