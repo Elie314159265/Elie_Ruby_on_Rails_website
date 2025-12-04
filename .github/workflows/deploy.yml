@@ -84,7 +84,8 @@ jobs:
         run: |
           terraform plan \
             -var="rails_master_key=${{ secrets.RAILS_MASTER_KEY }}" \
-            -out=tfplan
+            -out=tfplan \
+            -var="domain_name=elie-portfolio.com"
       
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main'
