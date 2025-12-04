@@ -57,6 +57,12 @@ data "aws_ami" "ubuntu" {
 # Route 53 - ドメイン登録とホストゾーン
 # ========================================
 
+# ✅ 既存のホストゾーンを参照（use_existing_domain = true の場合）
+data "aws_route53_zone" "existing" {
+  count = var.use_existing_domain && var.domain_name != "" ? 1 : 0
+  name  = var.domain_name
+}
+
 # ✅ 新規: Route 53ドメイン登録（オプション）
 resource "aws_route53domains_registered_domain" "main" {
   count = var.register_new_domain ? 1 : 0
@@ -89,9 +95,9 @@ resource "aws_route53domains_registered_domain" "main" {
   }
 }
 
-# ✅ 新規: Route 53 Hosted Zone
+# ✅ 新規: Route 53 Hosted Zone（use_existing_domain = false の場合のみ作成）
 resource "aws_route53_zone" "main" {
-  count = var.domain_name != "" ? 1 : 0
+  count = !var.use_existing_domain && var.domain_name != "" ? 1 : 0
   name  = var.domain_name
 
   tags = {
@@ -99,10 +105,19 @@ resource "aws_route53_zone" "main" {
   }
 }
 
+# ✅ ローカル変数: 既存または新規のゾーンIDを選択
+locals {
+  zone_id = var.use_existing_domain ? (
+    length(data.aws_route53_zone.existing) > 0 ? data.aws_route53_zone.existing[0].zone_id : ""
+  ) : (
+    length(aws_route53_zone.main) > 0 ? aws_route53_zone.main[0].zone_id : ""
+  )
+}
+
 # ✅ 新規: Aレコード（ALB向け）
 resource "aws_route53_record" "main" {
   count   = var.domain_name != "" ? 1 : 0
-  zone_id = aws_route53_zone.main[0].zone_id
+  zone_id = local.zone_id
   name    = var.domain_name
   type    = "A"
 
@@ -116,7 +131,7 @@ resource "aws_route53_record" "main" {
 # ✅ 新規: wwwサブドメイン
 resource "aws_route53_record" "www" {
   count   = var.domain_name != "" && var.create_www_subdomain ? 1 : 0
-  zone_id = aws_route53_zone.main[0].zone_id
+  zone_id = local.zone_id
   name    = "www.${var.domain_name}"
   type    = "A"
 
@@ -164,7 +179,7 @@ resource "aws_route53_record" "cert_validation" {
   records         = [each.value.record]
   ttl             = 60
   type            = each.value.type
-  zone_id         = aws_route53_zone.main[0].zone_id
+  zone_id         = local.zone_id
 }
 
 # ✅ 新規: 証明書検証完了待機
@@ -172,6 +187,17 @@ resource "aws_acm_certificate_validation" "main" {
   count                   = var.domain_name != "" ? 1 : 0
   certificate_arn         = aws_acm_certificate.main[0].arn
   validation_record_fqdns = [for record in aws_route53_record.cert_validation : record.fqdn]
+
+  # ドメイン登録が完了してからDNS検証を開始
+  depends_on = [
+    aws_route53domains_registered_domain.main,
+    aws_route53_record.cert_validation
+  ]
+
+  # タイムアウトを設定（デフォルト75分）
+  timeouts {
+    create = "45m"
+  }
 }
 
 # ========================================
