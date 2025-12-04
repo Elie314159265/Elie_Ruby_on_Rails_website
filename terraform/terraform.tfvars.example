@@ -1,0 +1,23 @@
+# ========================================
+# terraform.tfvars.example - 変数値テンプレート
+# ========================================
+# 
+# 
+# 注意: terraform.tfvars は .gitignore に含まれています（Git管理外）
+# 
+# ========================================
+
+# Terraform Variables Example
+# このファイルをコピーして terraform.tfvars を作成してください
+# 基本設定
+aws_region        = "ap-northeast-1"
+environment       = "production"
+project_name      = "rails-portfolio"
+instance_type     = "t3.micro"  # Free Tier: t2.micro
+rails_master_key  = "your-rails-master-key-here"
+
+# Route 53新規ドメイン取得
+domain_name          = "your-domain.com"  # 希望するドメイン名（.com推奨）
+register_new_domain  = true               # Route 53で新規取得
+use_existing_domain  = false
+create_www_subdomain = true               # www.your-domain.com も作成

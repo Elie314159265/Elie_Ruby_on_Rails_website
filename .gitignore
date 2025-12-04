@@ -33,3 +33,31 @@
 # Ignore key files for decrypting credentials and more.
 /config/*.key
 
+# Terraform
+terraform/.terraform/
+terraform/.terraform.lock.hcl
+terraform/terraform.tfstate
+terraform/terraform.tfstate.backup
+terraform/terraform.tfvars
+terraform/*.tfplan
+terraform/crash.log
+terraform/crash.*.log
+terraform/override.tf
+terraform/override.tf.json
+terraform/*_override.tf
+terraform/*_override.tf.json
+
+# SSH Keys
+*.pem
+*.key
+id_rsa*
+id_ed25519*
+!.github/
+
+# Environment variables
+.env.production
+.env.staging
+
+# Deployment logs
+deployment.log
+
