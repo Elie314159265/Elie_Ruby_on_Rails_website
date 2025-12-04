@@ -495,6 +495,7 @@ resource "aws_instance" "rails_app" {
 
   tags = {
     Name = "${var.project_name}-ec2"
+    Project = var.project_name 
   }
 }
 

@@ -1,0 +1,176 @@
+name: Deploy Application
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'app/**'
+      - 'config/**'
+      - 'db/**'
+      - 'lib/**'
+      - 'public/**'
+      - 'Gemfile'
+      - 'Gemfile.lock'
+      - 'Dockerfile'
+      - '.dockerignore'
+  workflow_dispatch:
+    inputs:
+      instance_id:
+        description: 'EC2 Instance ID (optional)'
+        required: false
+        type: string
+
+env:
+  AWS_REGION: ap-northeast-1
+  PROJECT_NAME: rails-portfolio
+
+jobs:
+  deploy:
+    name: Deploy Rails Application
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+      
+      - name: Get EC2 Instance ID
+        id: get_instance
+        run: |
+          if [ -n "${{ inputs.instance_id }}" ]; then
+            INSTANCE_ID="${{ inputs.instance_id }}"
+            echo "Using manually provided instance ID: $INSTANCE_ID"
+          else
+            INSTANCE_ID=$(aws ec2 describe-instances \
+              --filters "Name=tag:Project,Values=${{ env.PROJECT_NAME }}" \
+                        "Name=instance-state-name,Values=running" \
+              --query "Reservations[0].Instances[0].InstanceId" \
+              --output text)
+            
+            if [ "$INSTANCE_ID" == "None" ] || [ -z "$INSTANCE_ID" ]; then
+              echo "❌ EC2 instance not found!"
+              echo "Please ensure infrastructure is created via Terraform first."
+              exit 1
+            fi
+            
+            echo "Auto-detected instance ID: $INSTANCE_ID"
+          fi
+          
+          echo "instance_id=$INSTANCE_ID" >> $GITHUB_OUTPUT
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      
+      - name: Build Docker Image
+        run: |
+          docker build -t rails-portfolio:latest .
+          docker save rails-portfolio:latest | gzip > rails-portfolio.tar.gz
+      
+      - name: Check EC2 Instance Status
+        run: |
+          echo "Checking EC2 instance status..."
+          STATUS=$(aws ec2 describe-instance-status \
+            --instance-ids ${{ steps.get_instance.outputs.instance_id }} \
+            --query "InstanceStatuses[0].InstanceStatus.Status" \
+            --output text)
+          
+          if [ "$STATUS" != "ok" ]; then
+            echo "⚠️ Instance status is: $STATUS"
+            echo "Waiting for instance to be ready..."
+            aws ec2 wait instance-status-ok \
+              --instance-ids ${{ steps.get_instance.outputs.instance_id }}
+          fi
+          
+          echo "✅ EC2 instance is ready!"
+      
+      - name: Upload Docker Image to S3
+        run: |
+          BUCKET_NAME="rails-portfolio-deploy-temp-$(date +%s)"
+          aws s3 mb s3://$BUCKET_NAME
+          aws s3 cp rails-portfolio.tar.gz s3://$BUCKET_NAME/
+          echo "DEPLOY_BUCKET=$BUCKET_NAME" >> $GITHUB_ENV
+      
+      - name: Deploy via Systems Manager
+        run: |
+          echo "Deploying to instance: ${{ steps.get_instance.outputs.instance_id }}"
+          
+          COMMAND_ID=$(aws ssm send-command \
+            --instance-ids ${{ steps.get_instance.outputs.instance_id }} \
+            --document-name "AWS-RunShellScript" \
+            --parameters commands="[
+              'echo \"=== Starting Deployment ===\"',
+              'cd /home/ubuntu/app',
+              'echo \"Downloading Docker image...\"',
+              'aws s3 cp s3://${{ env.DEPLOY_BUCKET }}/rails-portfolio.tar.gz . --quiet',
+              'echo \"Loading Docker image...\"',
+              'docker load < rails-portfolio.tar.gz',
+              'echo \"Stopping old container...\"',
+              'docker stop rails-app 2>/dev/null || true',
+              'docker rm rails-app 2>/dev/null || true',
+              'echo \"Starting new container...\"',
+              'docker run -d --name rails-app --restart unless-stopped -p 3000:3000 -e RAILS_ENV=production -e RAILS_MASTER_KEY=${{ secrets.RAILS_MASTER_KEY }} rails-portfolio:latest',
+              'sleep 5',
+              'echo \"Running health check...\"',
+              'curl -f http://localhost:3000/up || exit 1',
+              'echo \"Cleaning up...\"',
+              'rm -f rails-portfolio.tar.gz',
+              'docker image prune -f --filter \"until=24h\"',
+              'echo \"=== Deployment Complete ===\"'
+            ]" \
+            --output text \
+            --query "Command.CommandId")
+          
+          echo "Command ID: $COMMAND_ID"
+          echo "command_id=$COMMAND_ID" >> $GITHUB_ENV
+          
+          echo "Waiting for deployment to complete..."
+          aws ssm wait command-executed \
+            --command-id $COMMAND_ID \
+            --instance-id ${{ steps.get_instance.outputs.instance_id }} \
+            --cli-read-timeout 600
+          
+          STATUS=$(aws ssm get-command-invocation \
+            --command-id $COMMAND_ID \
+            --instance-id ${{ steps.get_instance.outputs.instance_id }} \
+            --query "Status" \
+            --output text)
+          
+          echo "Deployment status: $STATUS"
+          
+          if [ "$STATUS" != "Success" ]; then
+            echo "❌ Deployment failed!"
+            exit 1
+          fi
+          
+          echo "✅ Deployment successful!"
+      
+      - name: Cleanup S3 Bucket
+        if: always()
+        run: |
+          if [ ! -z "${{ env.DEPLOY_BUCKET }}" ]; then
+            echo "Cleaning up S3 bucket..."
+            aws s3 rm s3://${{ env.DEPLOY_BUCKET }}/rails-portfolio.tar.gz --quiet || true
+            aws s3 rb s3://${{ env.DEPLOY_BUCKET }} --force || true
+            echo "✅ Cleanup complete"
+          fi
+      
+      - name: Cleanup
+        if: always()
+        run: |
+          rm -f rails-portfolio.tar.gz
+      
+      - name: Deployment Summary
+        if: always()
+        run: |
+          echo "## Deployment Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Instance ID**: ${{ steps.get_instance.outputs.instance_id }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Application URL**: https://elie-portfolio.com" >> $GITHUB_STEP_SUMMARY
+          echo "- **Command ID**: ${{ env.command_id }}" >> $GITHUB_STEP_SUMMARY
