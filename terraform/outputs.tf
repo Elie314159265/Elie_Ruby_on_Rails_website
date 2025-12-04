@@ -1,5 +1,5 @@
 # ========================================
-# outputs.tf - Route 53 + ACM + ALB対応版
+# outputs.tf - Route 53 + ACM + ALB対応版 (Simplified)
 # ========================================
 
 # ========================================
@@ -17,7 +17,7 @@ output "ssm_connection_command" {
 }
 
 # ========================================
-# ALB関連（新規）
+# ALB関連
 # ========================================
 
 output "alb_dns_name" {
@@ -36,7 +36,7 @@ output "target_group_arn" {
 }
 
 # ========================================
-# Route 53関連（新規）
+# Route 53関連
 # ========================================
 
 output "route53_zone_id" {
@@ -44,6 +44,7 @@ output "route53_zone_id" {
   value       = var.domain_name != "" ? local.zone_id : "N/A (no domain configured)"
 }
 
+# ネームサーバー情報はここで出力されます
 output "route53_name_servers" {
   description = "Route 53 Name Servers (use these if migrating existing domain)"
   value = var.domain_name != "" ? (
@@ -55,11 +56,8 @@ output "route53_name_servers" {
   ) : []
 }
 
-# エラーの原因となっていた domain_migration_instructions ブロックは削除しました。
-# ネームサーバーの情報が必要な場合は、上記の route53_name_servers の出力を参照してください。
-
 # ========================================
-# ACM関連（新規）
+# ACM関連
 # ========================================
 
 output "acm_certificate_arn" {
@@ -73,7 +71,7 @@ output "acm_certificate_status" {
 }
 
 # ========================================
-# Application URL（最終）
+# Application URL
 # ========================================
 
 output "application_url" {
@@ -87,35 +85,10 @@ output "www_url" {
 }
 
 # ========================================
-# コスト情報（参考）
+# デプロイ完了メッセージ
 # ========================================
 
-# コスト情報も同様に複雑な文字列操作を含むため、エラー回避のためにシンプル化、または削除しても構いません。
-# ここでは残していますが、もしここでもエラーが出る場合は削除してください。
-output "estimated_monthly_cost" {
-  description = "Estimated monthly cost breakdown (USD)"
-  value = <<-EOT
-    
-    ========================================
-    月額コスト見積もり（東京リージョン）
-    ========================================
-    
-    EC2 (${var.instance_type}):           $${var.instance_type == "t3.micro" ? "7.59" : var.instance_type == "t2.micro" ? "9.50" : "15.00"}
-    EBS (20GB gp3):                       $1.60
-    ALB:                                  $18.00
-    Route 53 Hosted Zone:                 $0.50
-    ACM Certificate:                      $0.00 (無料)
-    CloudWatch Logs (~1GB):               $0.50
-    Data Transfer (~10GB):                $0.90
-    ${var.register_new_domain ? "Route 53 Domain (.com):              $1.08 (年$13を月割)" : ""}
-    ----------------------------------------
-    合計:                                 $${var.register_new_domain ? "29.17" : "28.09"}/月
-    
-    ========================================
-  EOT
-}
-
-output "deployment_complete_message" {
-  description = "Deployment completion message"
-  value = "Deployment completed! Access your app at: ${var.domain_name != "" ? "https://${var.domain_name}" : "http://${aws_lb.main.dns_name}"}"
+output "deployment_info" {
+  description = "Deployment summary"
+  value       = "Deployment completed! Access your app at: ${var.domain_name != "" ? "https://${var.domain_name}" : "http://${aws_lb.main.dns_name}"}"
 }
