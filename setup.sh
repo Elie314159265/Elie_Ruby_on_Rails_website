@@ -910,7 +910,7 @@ EOF
 # ========================================
 
 echo "=== Dockerfile を作成しています ==="
-
+cd ..
 if [ -f Dockerfile ]; then
   echo "Dockerfile は既に存在します（スキップ）"
 else
