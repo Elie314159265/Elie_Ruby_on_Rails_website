@@ -349,7 +349,8 @@ resource "aws_route53_record" "cert_validation" {
 
 # 証明書発行の完了待ち
 resource "aws_acm_certificate_validation" "main" {
-  certificate_arn         = aws_acm_certificate.main.arn
+  count = var.domain_name != "" ? 1 : 0
+  certificate_arn         = aws_acm_certificate.main[0].arn
   validation_record_fqdns = [for r in aws_route53_record.cert_validation : r.fqdn]
 
   timeouts {
@@ -666,7 +667,7 @@ systemctl enable docker
 # Docker Composeのインストール
 echo "=== Installing Docker Compose ==="
 DOCKER_COMPOSE_VERSION="2.24.5"
-curl -L "https://github.com/docker/compose/releases/download/v${DOCKER_COMPOSE_VERSION}/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+curl -L "https://github.com/docker/compose/releases/download/v$${DOCKER_COMPOSE_VERSION}/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 chmod +x /usr/local/bin/docker-compose
 
 # アプリケーション用ディレクトリ作成
@@ -785,12 +786,12 @@ output "route53_name_servers" {
 
 output "acm_certificate_arn" {
   description = "ARN of the ACM SSL certificate"
-  value       = aws_acm_certificate.main.arn
+  value       = var.domain_name != "" ? aws_acm_certificate.main[0].arn : "N/A"
 }
 
 output "acm_certificate_status" {
   description = "Status of the ACM certificate"
-  value       = aws_acm_certificate.main.status
+  value       = var.domain_name != "" ? aws_acm_certificate.main[0].status : "N/A"
 }
 
 # ========================================
