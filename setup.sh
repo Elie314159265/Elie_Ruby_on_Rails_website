@@ -72,75 +72,130 @@ fi
 echo ""
 
 # ========================================
-# 4. Terraform のインストール
+# 4. TerraformとAWS CLI のインストール
 # ========================================
 
-# Terraformインストールの前に依存チェック
-if ! command -v wget &> /dev/null && ! command -v curl &> /dev/null; then
-  echo "wget または curl が必要です"
+# 依存ツールのチェック (wget/curl, unzip)
+if ! command -v unzip &> /dev/null; then
+  echo "Error: unzip コマンドが必要です。インストールしてください。"
   exit 1
 fi
 
-echo "=== Terraform をインストールしています ==="
-
-if command -v terraform &> /dev/null; then
-  CURRENT_VERSION=$(terraform version | head -n 1 | awk '{print $2}')
-  echo "Terraform は既にインストールされています: $CURRENT_VERSION"
-else
-  # OS判定
-  OS="$(uname -s)"
-  case "${OS}" in
-    Linux*)
-      echo "Linux環境を検出しました"
-      
-      # アーキテクチャ判定
-      ARCH="$(uname -m)"
-      case "${ARCH}" in
-        x86_64)
-          TF_ARCH="amd64"
-          ;;
-        aarch64|arm64)
-          TF_ARCH="arm64"
-          ;;
-        *)
-          echo "サポートされていないアーキテクチャ: ${ARCH}"
-          exit 1
-          ;;
-      esac
-      
-      # Terraformダウンロード＆インストール
-      TF_VERSION="1.7.0"
-      wget "https://releases.hashicorp.com/terraform/${TF_VERSION}/terraform_${TF_VERSION}_linux_${TF_ARCH}.zip"
-      unzip "terraform_${TF_VERSION}_linux_${TF_ARCH}.zip"
-      sudo mv terraform /usr/local/bin/
-      rm "terraform_${TF_VERSION}_linux_${TF_ARCH}.zip"
-      ;;
-      
-    Darwin*)
-      echo "macOS環境を検出しました"
-      
-      # Homebrewでインストール
-      if command -v brew &> /dev/null; then
-        brew tap hashicorp/tap
-        brew install hashicorp/tap/terraform
-      else
-        echo "Homebrewがインストールされていません"
-        echo "Homebrewをインストールするか、手動でTerraformをインストールしてください"
-        exit 1
-      fi
-      ;;
-      
-    *)
-      echo "サポートされていないOS: ${OS}"
-      exit 1
-      ;;
-  esac
-  
-  echo "Terraform をインストールしました"
+if ! command -v wget &> /dev/null && ! command -v curl &> /dev/null; then
+  echo "Error: wget または curl が必要です。"
+  exit 1
 fi
 
-# バージョン確認
-terraform version
+# ダウンロード関数の定義 (wget優先、なければcurl)
+download_file() {
+  local url="$1"
+  local output="$2"
+  if command -v wget &> /dev/null; then
+    wget -O "$output" "$url"
+  else
+    curl -L -o "$output" "$url"
+  fi
+}
+
+echo "=== ツール (Terraform, AWS CLI) のインストール状況を確認中... ==="
+
+# OSとアーキテクチャの共通判定
+OS="$(uname -s)"
+ARCH="$(uname -m)"
+TF_ARCH=""
+AWS_ARCH=""
+
+case "${OS}" in
+  Linux*)
+    case "${ARCH}" in
+      x86_64)
+        TF_ARCH="amd64"
+        AWS_ARCH="x86_64"
+        ;;
+      aarch64|arm64)
+        TF_ARCH="arm64"
+        AWS_ARCH="aarch64"
+        ;;
+      *)
+        echo "Error: サポートされていないアーキテクチャ: ${ARCH}"
+        exit 1
+        ;;
+    esac
+    ;;
+  Darwin*)
+    # macOSはHomebrewを使用するためアーキテクチャ変数は使わないが、分岐用に判定
+    ;;
+  *)
+    echo "Error: サポートされていないOS: ${OS}"
+    exit 1
+    ;;
+esac
+
+
+# --- 1. Terraform のインストール ---
+if command -v terraform &> /dev/null; then
+  CURRENT_TF_VERSION=$(terraform version | head -n 1 | awk '{print $2}')
+  echo "Terraform は既にインストールされています: $CURRENT_TF_VERSION"
+else
+  echo "Terraform をインストールします..."
+  if [ "${OS}" = "Linux" ]; then
+    TF_VERSION="1.7.0"
+    echo "Downloading Terraform v${TF_VERSION} for Linux (${TF_ARCH})..."
+    download_file "https://releases.hashicorp.com/terraform/${TF_VERSION}/terraform_${TF_VERSION}_linux_${TF_ARCH}.zip" "terraform.zip"
+    
+    unzip -q terraform.zip
+    sudo mv terraform /usr/local/bin/
+    rm terraform.zip
+    echo "Terraform installed successfully."
+    
+  elif [[ "${OS}" == Darwin* ]]; then
+    if command -v brew &> /dev/null; then
+      brew tap hashicorp/tap
+      brew install hashicorp/tap/terraform
+    else
+      echo "Error: Homebrewが見つかりません。Terraformを手動インストールしてください。"
+      exit 1
+    fi
+  fi
+fi
+
+
+# --- 2. AWS CLI のインストール ---
+if command -v aws &> /dev/null; then
+  CURRENT_AWS_VERSION=$(aws --version | awk '{print $1}')
+  echo "AWS CLI は既にインストールされています: $CURRENT_AWS_VERSION"
+else
+  echo "AWS CLI をインストールします..."
+  if [ "${OS}" = "Linux" ]; then
+    echo "Downloading AWS CLI v2 for Linux (${AWS_ARCH})..."
+    download_file "https://awscli.amazonaws.com/awscli-exe-linux-${AWS_ARCH}.zip" "awscliv2.zip"
+    
+    unzip -q awscliv2.zip
+    # 更新の場合も考慮してinstallまたはupdateを実行
+    if [ -d "/usr/local/aws-cli" ]; then
+        sudo ./aws/install --update
+    else
+        sudo ./aws/install
+    fi
+    
+    rm awscliv2.zip
+    rm -rf aws
+    echo "AWS CLI installed successfully."
+
+  elif [[ "${OS}" == Darwin* ]]; then
+    if command -v brew &> /dev/null; then
+      brew install awscli
+    else
+      echo "Error: Homebrewが見つかりません。AWS CLIを手動インストールしてください。"
+      exit 1
+    fi
+  fi
+fi
+
+echo ""
+echo "=== バージョン確認 ==="
+terraform version | head -n 1
+aws --version
 echo ""
 
 # ========================================
